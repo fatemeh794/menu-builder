@@ -1,0 +1,41 @@
+# --- Environment / secrets ---
+.env
+.env.*
+!.env.example
+
+# --- Python / Django ---
+backend/.venv/
+backend/venv/
+__pycache__/
+*.py[cod]
+*$py.class
+backend/**/migrations/__pycache__/
+*.sqlite3
+backend/staticfiles/
+backend/media/
+backend/mediafiles/
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+backend/**/local_settings.py
+
+# --- Node / Angular ---
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+frontend/coverage/
+npm-debug.log*
+yarn-error.log*
+
+# --- Docker ---
+*.pid
+
+# --- IDE / OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# --- QR / generated media (regeneratable) ---
+backend/media/qrcodes/
