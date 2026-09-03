@@ -17,7 +17,11 @@
     "quantity": "تعداد",
     "total": "جمع کل",
     "download": "دانلود",
-    "language": "زبان"
+    "language": "زبان",
+    "logout": "خروج",
+    "actions": "عملیات",
+    "status": "وضعیت",
+    "no_results": "موردی یافت نشد"
   },
   "menu": {
     "all_categories": "همه",
@@ -63,6 +67,8 @@
     "try_again": "تلاش مجدد برای پرداخت"
   },
   "dashboard": {
+    "select_restaurant": "انتخاب رستوران",
+    "no_restaurants": "هیچ رستورانی برای شما تعریف نشده است",
     "nav": {
       "orders": "سفارش‌ها",
       "menu": "منو",
@@ -77,6 +83,27 @@
       "password": "رمز عبور",
       "submit": "ورود",
       "error": "نام کاربری یا رمز عبور اشتباه است"
+    },
+    "staff": {
+      "email": "ایمیل",
+      "first_name": "نام",
+      "last_name": "نام خانوادگی",
+      "password": "رمز عبور (کاربر جدید)",
+      "role": "نقش",
+      "invite": "افزودن",
+      "invite_error": "افزودن پرسنل با مشکل مواجه شد"
+    },
+    "settings": {
+      "name": "نام رستوران",
+      "description": "توضیحات",
+      "primary_color": "رنگ اصلی",
+      "secondary_color": "رنگ ثانویه",
+      "background_color": "رنگ پس‌زمینه",
+      "border_radius": "گردی گوشه‌ها",
+      "logo": "لوگو",
+      "cover_image": "تصویر کاور",
+      "save_success": "تغییرات ذخیره شد",
+      "preview": "پیش‌نمایش"
     }
   }
 }

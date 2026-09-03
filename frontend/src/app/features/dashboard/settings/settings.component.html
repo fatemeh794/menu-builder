@@ -1,0 +1,83 @@
+<div class="page">
+  <h1 class="page__title">{{ 'dashboard.nav.settings' | translate }}</h1>
+
+  @if (!loading()) {
+    <div class="settings-layout">
+      <form [formGroup]="form" (ngSubmit)="save()" class="settings-form">
+        <label class="field">
+          <span>{{ 'dashboard.settings.name' | translate }}</span>
+          <input type="text" formControlName="name" />
+        </label>
+        <label class="field">
+          <span>{{ 'dashboard.settings.description' | translate }}</span>
+          <textarea rows="2" formControlName="description"></textarea>
+        </label>
+
+        <div class="field-row">
+          <label class="field field--color">
+            <span>{{ 'dashboard.settings.primary_color' | translate }}</span>
+            <input type="color" formControlName="theme_primary_color" />
+          </label>
+          <label class="field field--color">
+            <span>{{ 'dashboard.settings.secondary_color' | translate }}</span>
+            <input type="color" formControlName="theme_secondary_color" />
+          </label>
+          <label class="field field--color">
+            <span>{{ 'dashboard.settings.background_color' | translate }}</span>
+            <input type="color" formControlName="theme_background_color" />
+          </label>
+        </div>
+
+        <label class="field">
+          <span
+            >{{ 'dashboard.settings.border_radius' | translate }} ({{
+              form.value.theme_border_radius
+            }}px)</span
+          >
+          <input type="range" min="0" max="32" formControlName="theme_border_radius" />
+        </label>
+
+        <label class="field">
+          <span>{{ 'dashboard.settings.logo' | translate }}</span>
+          <input type="file" accept="image/*" (change)="onLogoSelected($event)" />
+        </label>
+        <label class="field">
+          <span>{{ 'dashboard.settings.cover_image' | translate }}</span>
+          <input type="file" accept="image/*" (change)="onCoverSelected($event)" />
+        </label>
+
+        <button type="submit" class="settings-form__submit" [disabled]="saving()">
+          {{ 'common.save' | translate }}
+        </button>
+        @if (saved()) {
+          <p class="settings-form__success">{{ 'dashboard.settings.save_success' | translate }}</p>
+        }
+      </form>
+
+      <div class="settings-preview">
+        <span class="settings-preview__label">{{ 'dashboard.settings.preview' | translate }}</span>
+        <div
+          class="preview-hero"
+          [style.background]="
+            'linear-gradient(135deg, ' +
+            form.value.theme_primary_color +
+            ', ' +
+            form.value.theme_secondary_color +
+            ')'
+          "
+          [style.border-radius.px]="form.value.theme_border_radius"
+        >
+          <span class="preview-hero__name">{{ form.value.name || settings()?.name }}</span>
+        </div>
+        <button
+          type="button"
+          class="preview-btn"
+          [style.background]="form.value.theme_primary_color"
+          [style.border-radius.px]="form.value.theme_border_radius"
+        >
+          {{ 'menu.add_to_cart' | translate }}
+        </button>
+      </div>
+    </div>
+  }
+</div>

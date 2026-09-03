@@ -17,7 +17,11 @@
     "quantity": "Quantity",
     "total": "Total",
     "download": "Download",
-    "language": "Language"
+    "language": "Language",
+    "logout": "Logout",
+    "actions": "Actions",
+    "status": "Status",
+    "no_results": "No results found"
   },
   "menu": {
     "all_categories": "All",
@@ -63,6 +67,8 @@
     "try_again": "Try payment again"
   },
   "dashboard": {
+    "select_restaurant": "Select a restaurant",
+    "no_restaurants": "You don't belong to any restaurant yet",
     "nav": {
       "orders": "Orders",
       "menu": "Menu",
@@ -77,6 +83,27 @@
       "password": "Password",
       "submit": "Sign in",
       "error": "Invalid username or password"
+    },
+    "staff": {
+      "email": "Email",
+      "first_name": "First name",
+      "last_name": "Last name",
+      "password": "Password (new user)",
+      "role": "Role",
+      "invite": "Add",
+      "invite_error": "Could not add staff member"
+    },
+    "settings": {
+      "name": "Restaurant name",
+      "description": "Description",
+      "primary_color": "Primary color",
+      "secondary_color": "Secondary color",
+      "background_color": "Background color",
+      "border_radius": "Corner roundness",
+      "logo": "Logo",
+      "cover_image": "Cover image",
+      "save_success": "Changes saved",
+      "preview": "Preview"
     }
   }
 }

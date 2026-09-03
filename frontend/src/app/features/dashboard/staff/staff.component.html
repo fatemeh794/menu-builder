@@ -1,0 +1,55 @@
+<div class="page">
+  <h1 class="page__title">{{ 'dashboard.nav.staff' | translate }}</h1>
+
+  <form [formGroup]="form" (ngSubmit)="invite()" class="invite-form">
+    <input
+      type="email"
+      [placeholder]="'dashboard.staff.email' | translate"
+      formControlName="email"
+    />
+    <input
+      type="text"
+      [placeholder]="'dashboard.staff.first_name' | translate"
+      formControlName="first_name"
+    />
+    <input
+      type="text"
+      [placeholder]="'dashboard.staff.last_name' | translate"
+      formControlName="last_name"
+    />
+    <input
+      type="password"
+      [placeholder]="'dashboard.staff.password' | translate"
+      formControlName="password"
+    />
+    <select formControlName="role">
+      @for (role of roles; track role) {
+        <option [value]="role">{{ role }}</option>
+      }
+    </select>
+    <button type="submit">{{ 'dashboard.staff.invite' | translate }}</button>
+  </form>
+
+  @if (error(); as errorKey) {
+    <p class="invite-form__error">{{ errorKey | translate }}</p>
+  }
+
+  @if (!loading() && staff().length === 0) {
+    <app-empty-state icon="👥" [title]="'common.no_results' | translate" />
+  }
+
+  <div class="staff-list">
+    @for (membership of staff(); track membership.id) {
+      <div class="staff-row">
+        <span class="staff-row__name">
+          {{ membership.user.first_name }} {{ membership.user.last_name }}
+          <span class="staff-row__email">{{ membership.user.email }}</span>
+        </span>
+        <span class="staff-row__role">{{ membership.role }}</span>
+        <button type="button" (click)="remove(membership)">
+          <mat-icon>delete_outline</mat-icon>
+        </button>
+      </div>
+    }
+  </div>
+</div>

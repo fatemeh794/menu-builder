@@ -1,0 +1,40 @@
+<mat-sidenav-container class="shell">
+  <mat-sidenav mode="side" opened class="shell__sidenav">
+    <div class="shell__brand">
+      <span class="shell__brand-icon">🍽️</span>
+      <span>Restaurant Admin</span>
+    </div>
+
+    @if (restaurantSlug(); as slug) {
+      <mat-nav-list>
+        @for (item of navItems; track item.path) {
+          <a
+            mat-list-item
+            [routerLink]="['/dashboard', slug, item.path]"
+            routerLinkActive="shell__nav-item--active"
+          >
+            <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+            <span matListItemTitle>{{ item.labelKey | translate }}</span>
+          </a>
+        }
+      </mat-nav-list>
+    }
+
+    <div class="shell__sidenav-footer">
+      <button type="button" mat-list-item (click)="toggleLanguage()">
+        <mat-icon matListItemIcon>language</mat-icon>
+        <span matListItemTitle>{{
+          translationService.currentLang() === 'fa' ? 'English' : 'فارسی'
+        }}</span>
+      </button>
+      <button type="button" mat-list-item (click)="logout()">
+        <mat-icon matListItemIcon>logout</mat-icon>
+        <span matListItemTitle>{{ 'common.logout' | translate }}</span>
+      </button>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="shell__content">
+    <router-outlet />
+  </mat-sidenav-content>
+</mat-sidenav-container>

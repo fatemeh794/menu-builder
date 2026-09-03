@@ -1,0 +1,37 @@
+<div class="page">
+  <h1 class="page__title">{{ 'dashboard.nav.categories' | translate }}</h1>
+
+  <div class="add-row">
+    <input
+      type="text"
+      [ngModel]="newCategoryName()"
+      (ngModelChange)="newCategoryName.set($event)"
+      (keyup.enter)="add()"
+      placeholder="+"
+    />
+    <button type="button" (click)="add()">{{ 'common.add' | translate }}</button>
+  </div>
+
+  @if (!loading() && categories().length === 0) {
+    <app-empty-state icon="🗂️" [title]="'common.no_results' | translate" />
+  }
+
+  <div class="category-list">
+    @for (category of categories(); track category.id) {
+      <div class="category-row" [class.category-row--inactive]="!category.is_active">
+        <input
+          type="text"
+          class="category-row__name"
+          [value]="category.name"
+          (change)="rename(category, $any($event.target).value)"
+        />
+        <button type="button" class="category-row__toggle" (click)="toggleActive(category)">
+          <mat-icon>{{ category.is_active ? 'visibility' : 'visibility_off' }}</mat-icon>
+        </button>
+        <button type="button" class="category-row__delete" (click)="remove(category)">
+          <mat-icon>delete_outline</mat-icon>
+        </button>
+      </div>
+    }
+  </div>
+</div>

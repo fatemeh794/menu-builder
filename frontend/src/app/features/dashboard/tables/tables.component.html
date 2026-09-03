@@ -1,0 +1,67 @@
+<div class="page">
+  <h1 class="page__title">{{ 'dashboard.nav.tables' | translate }}</h1>
+
+  <div class="add-row">
+    <input
+      type="text"
+      placeholder="+"
+      [ngModel]="newTableLabel()"
+      (ngModelChange)="newTableLabel.set($event)"
+      (keyup.enter)="add()"
+    />
+    <button type="button" (click)="add()">{{ 'common.add' | translate }}</button>
+  </div>
+
+  @if (!loading() && tables().length === 0) {
+    <app-empty-state icon="🪑" [title]="'common.no_results' | translate" />
+  }
+
+  <div class="table-grid">
+    @for (table of tables(); track table.id) {
+      <div class="table-card" [class.table-card--inactive]="!table.is_active">
+        <span class="table-card__label">{{ table.label }}</span>
+        <div class="table-card__actions">
+          <button
+            type="button"
+            (click)="showQr(table)"
+            [attr.title]="'common.download' | translate"
+          >
+            <mat-icon>qr_code_2</mat-icon>
+          </button>
+          <button type="button" (click)="toggleActive(table)">
+            <mat-icon>{{ table.is_active ? 'visibility' : 'visibility_off' }}</mat-icon>
+          </button>
+          <button type="button" class="table-card__delete" (click)="remove(table)">
+            <mat-icon>delete_outline</mat-icon>
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+
+  @if (qrPreviewUrl(); as url) {
+    <div
+      class="qr-modal-backdrop"
+      role="button"
+      tabindex="0"
+      (click)="closeQr()"
+      (keyup.enter)="closeQr()"
+      (keyup.escape)="closeQr()"
+    >
+      <div
+        class="qr-modal"
+        role="dialog"
+        tabindex="-1"
+        (click)="$event.stopPropagation()"
+        (keyup)="$event.stopPropagation()"
+      >
+        <span class="qr-modal__title">{{ qrPreviewLabel() }}</span>
+        <img [src]="url" alt="QR code" class="qr-modal__image" />
+        <div class="qr-modal__actions">
+          <button type="button" (click)="downloadQr()">{{ 'common.download' | translate }}</button>
+          <button type="button" (click)="closeQr()">{{ 'common.close' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

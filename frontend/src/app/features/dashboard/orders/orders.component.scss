@@ -1,0 +1,151 @@
+.page {
+  padding: 1.5rem 2rem;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.page__title {
+  margin: 0 0 1.25rem;
+}
+
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.order-row {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+
+  &--terminal {
+    opacity: 0.65;
+  }
+}
+
+.order-row__summary {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 80px 1fr 60px 120px 140px;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1.1rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  text-align: start;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.02);
+  }
+}
+
+.order-row__table {
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.order-row__customer {
+  font-size: 0.88rem;
+}
+
+.order-row__count {
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 0.8rem;
+}
+
+.order-row__total {
+  font-weight: 700;
+  font-size: 0.88rem;
+}
+
+.status-badge {
+  justify-self: end;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: #eceff1;
+  color: #455a64;
+
+  &[data-status='PENDING'] {
+    background: #fff3e0;
+    color: #e65100;
+  }
+  &[data-status='CONFIRMED'] {
+    background: #e3f2fd;
+    color: #1565c0;
+  }
+  &[data-status='PREPARING'] {
+    background: #ede7f6;
+    color: #5e35b1;
+  }
+  &[data-status='READY'] {
+    background: #e0f7fa;
+    color: #00838f;
+  }
+  &[data-status='COMPLETED'] {
+    background: #e8f5e9;
+    color: #2e7d32;
+  }
+  &[data-status='CANCELLED'] {
+    background: #ffebee;
+    color: #c62828;
+  }
+}
+
+.order-detail {
+  padding: 0.75rem 1.1rem 1.1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  background: #fafafa;
+}
+
+.order-detail__item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  padding: 0.2rem 0;
+}
+
+.order-detail__options {
+  font-size: 0.75rem;
+  color: rgba(0, 0, 0, 0.5);
+  margin-bottom: 0.3rem;
+}
+
+.order-detail__note,
+.order-detail__phone {
+  font-size: 0.8rem;
+  color: rgba(0, 0, 0, 0.6);
+  margin-top: 0.4rem;
+}
+
+.order-detail__status-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.85rem;
+}
+
+.status-chip {
+  border: 1.5px solid rgba(0, 0, 0, 0.15);
+  background: #fff;
+  border-radius: 999px;
+  padding: 0.35rem 0.8rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+
+  &--active {
+    background: #1976d2;
+    border-color: #1976d2;
+    color: #fff;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}

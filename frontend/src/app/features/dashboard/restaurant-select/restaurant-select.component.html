@@ -1,0 +1,18 @@
+<div class="select-page">
+  <h1>{{ 'dashboard.select_restaurant' | translate }}</h1>
+
+  @if (!loading()) {
+    @if (authService.memberships().length === 0) {
+      <p class="select-page__empty">{{ 'dashboard.no_restaurants' | translate }}</p>
+    } @else {
+      <div class="select-page__grid">
+        @for (membership of authService.memberships(); track membership.id) {
+          <mat-card class="select-card" (click)="select(membership)">
+            <span class="select-card__name">{{ membership.restaurant.name }}</span>
+            <span class="select-card__role">{{ membership.role }}</span>
+          </mat-card>
+        }
+      </div>
+    }
+  }
+</div>

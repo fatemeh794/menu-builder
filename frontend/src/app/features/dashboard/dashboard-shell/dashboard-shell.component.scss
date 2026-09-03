@@ -1,0 +1,39 @@
+.shell {
+  height: 100dvh;
+}
+
+.shell__sidenav {
+  width: 240px;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0;
+  border-inline-end: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.shell__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem 1.25rem;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.shell__brand-icon {
+  font-size: 1.4rem;
+}
+
+.shell__nav-item--active {
+  background: rgba(0, 0, 0, 0.05);
+  font-weight: 600;
+}
+
+.shell__sidenav-footer {
+  margin-top: auto;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  padding-top: 0.5rem;
+}
+
+.shell__content {
+  background: #f7f7f9;
+}

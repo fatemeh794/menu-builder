@@ -1,0 +1,147 @@
+<div class="page">
+  <h1 class="page__title">{{ 'dashboard.nav.menu' | translate }}</h1>
+
+  <div class="add-row">
+    <input
+      type="text"
+      placeholder="+"
+      [ngModel]="draft().name"
+      (ngModelChange)="updateDraftName($event)"
+    />
+    <select [ngModel]="draft().categoryId" (ngModelChange)="updateDraftCategory($event)">
+      @for (category of categories(); track category.id) {
+        <option [value]="category.id">{{ category.name }}</option>
+      }
+    </select>
+    <input
+      type="number"
+      placeholder="0"
+      [ngModel]="draft().price"
+      (ngModelChange)="updateDraftPrice($event)"
+    />
+    <button type="button" (click)="addItem()">{{ 'common.add' | translate }}</button>
+  </div>
+
+  @if (!loading() && items().length === 0) {
+    <app-empty-state icon="🍽️" [title]="'common.no_results' | translate" />
+  }
+
+  <div class="item-list">
+    @for (item of items(); track item.id) {
+      <div class="item-row" [class.item-row--inactive]="!item.is_active">
+        <button type="button" class="item-row__main" (click)="toggleExpand(item)">
+          <mat-icon class="item-row__chevron">{{
+            expandedItemId() === item.id ? 'expand_less' : 'expand_more'
+          }}</mat-icon>
+          <span class="item-row__name">{{ item.name }}</span>
+          <span class="item-row__category">{{ categoryName(item.category) }}</span>
+        </button>
+
+        <input
+          type="number"
+          class="item-row__price"
+          [value]="item.base_price"
+          (click)="$event.stopPropagation()"
+          (change)="updatePrice(item, $any($event.target).value)"
+        />
+
+        <button
+          type="button"
+          class="item-row__icon-btn"
+          [class.item-row__icon-btn--off]="!item.is_available"
+          (click)="toggleAvailable(item)"
+          [attr.title]="'menu.sold_out' | translate"
+        >
+          <mat-icon>{{ item.is_available ? 'check_circle' : 'remove_circle' }}</mat-icon>
+        </button>
+        <button
+          type="button"
+          class="item-row__icon-btn"
+          [class.item-row__icon-btn--off]="!item.is_active"
+          (click)="toggleActive(item)"
+        >
+          <mat-icon>{{ item.is_active ? 'visibility' : 'visibility_off' }}</mat-icon>
+        </button>
+        <button
+          type="button"
+          class="item-row__icon-btn item-row__icon-btn--delete"
+          (click)="removeItem(item)"
+        >
+          <mat-icon>delete_outline</mat-icon>
+        </button>
+      </div>
+
+      @if (expandedItemId() === item.id) {
+        <div class="option-groups">
+          @for (group of optionGroups(); track group.id) {
+            <div class="option-group">
+              <div class="option-group__header">
+                <span class="option-group__name">{{ group.name }}</span>
+                <button type="button" class="pill-btn" (click)="toggleGroupType(item, group)">
+                  {{ group.selection_type }}
+                </button>
+                <button
+                  type="button"
+                  class="pill-btn"
+                  [class.pill-btn--active]="group.is_required"
+                  (click)="toggleGroupRequired(item, group)"
+                >
+                  {{ 'common.required' | translate }}
+                </button>
+                <button
+                  type="button"
+                  class="item-row__icon-btn item-row__icon-btn--delete"
+                  (click)="removeOptionGroup(item, group)"
+                >
+                  <mat-icon>delete_outline</mat-icon>
+                </button>
+              </div>
+
+              <div class="option-group__options">
+                @for (option of group.options; track option.id) {
+                  <span class="option-pill">
+                    {{ option.name }}
+                    @if (option.extra_price > 0) {
+                      <span class="ltr-nums">+{{ option.extra_price }}</span>
+                    }
+                    <button type="button" (click)="removeOption(item, group, option.id)">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </span>
+                }
+                <input #optName type="text" class="mini-input" placeholder="+" />
+                <input
+                  #optPrice
+                  type="number"
+                  class="mini-input mini-input--price"
+                  placeholder="0"
+                />
+                <button
+                  type="button"
+                  class="pill-btn"
+                  (click)="
+                    addOption(item, group, optName.value, optPrice.value);
+                    optName.value = '';
+                    optPrice.value = ''
+                  "
+                >
+                  {{ 'common.add' | translate }}
+                </button>
+              </div>
+            </div>
+          }
+
+          <div class="add-group-row">
+            <input #groupName type="text" placeholder="+" />
+            <button
+              type="button"
+              (click)="addOptionGroup(item, groupName.value); groupName.value = ''"
+            >
+              {{ 'common.add' | translate }}
+            </button>
+          </div>
+        </div>
+      }
+    }
+  </div>
+</div>
