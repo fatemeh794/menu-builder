@@ -1,0 +1,18 @@
+@if (!cartService.isEmpty()) {
+  <button
+    type="button"
+    class="cart-bar"
+    [class.cart-bar--pulse]="cartService.justAdded()"
+    (click)="viewCart.emit()"
+  >
+    <span class="cart-bar__count">
+      <span class="cart-bar__icon">🛒</span>
+      <span class="cart-bar__badge">{{ cartService.totalItems() }}</span>
+    </span>
+    <span class="cart-bar__label">{{ 'menu.view_cart' | translate }}</span>
+    <span class="cart-bar__price">
+      <span class="ltr-nums">{{ cartService.totalAmount() | tomanPrice }}</span>
+      {{ 'common.toman' | translate }}
+    </span>
+  </button>
+}

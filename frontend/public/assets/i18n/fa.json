@@ -20,8 +20,10 @@
     "language": "زبان"
   },
   "menu": {
+    "all_categories": "همه",
     "search_placeholder": "جستجوی غذا...",
     "empty_category": "غذایی در این دسته یافت نشد",
+    "load_error": "بارگذاری منو با مشکل مواجه شد",
     "sold_out": "ناموجود",
     "add_to_cart": "افزودن به سبد",
     "view_cart": "مشاهده سبد",

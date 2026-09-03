@@ -1,0 +1,80 @@
+<div class="cart-sheet">
+  <div class="cart-sheet__header">
+    <h2>{{ 'cart.title' | translate }}</h2>
+    <button type="button" class="cart-sheet__close" (click)="close()" aria-label="close">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  @if (cartService.isEmpty()) {
+    <div class="cart-sheet__empty">
+      <span class="cart-sheet__empty-icon">🛒</span>
+      <p>{{ 'cart.empty' | translate }}</p>
+      <span class="cart-sheet__empty-hint">{{ 'cart.empty_hint' | translate }}</span>
+    </div>
+  } @else {
+    <div class="cart-sheet__lines">
+      @for (line of cartService.lines(); track line.id) {
+        <div class="cart-line">
+          @if (line.menuItem.image) {
+            <img class="cart-line__image" [src]="line.menuItem.image" [alt]="line.menuItem.name" />
+          } @else {
+            <div class="cart-line__image cart-line__image--placeholder">🍽️</div>
+          }
+
+          <div class="cart-line__info">
+            <span class="cart-line__name">{{ line.menuItem.name }}</span>
+            @if (line.selectedOptions.length) {
+              <span class="cart-line__options">{{ optionsLabel(line) }}</span>
+            }
+            <div class="cart-line__bottom">
+              <div class="cart-line__stepper">
+                <button
+                  type="button"
+                  (click)="decrement(line.id, line.quantity)"
+                  aria-label="decrease"
+                >
+                  <mat-icon>remove</mat-icon>
+                </button>
+                <span>{{ line.quantity }}</span>
+                <button
+                  type="button"
+                  (click)="increment(line.id, line.quantity)"
+                  aria-label="increase"
+                >
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+              <span class="cart-line__price">
+                <span class="ltr-nums">{{ line.lineTotal | tomanPrice }}</span>
+                {{ 'common.toman' | translate }}
+              </span>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            class="cart-line__remove"
+            (click)="remove(line.id)"
+            [attr.aria-label]="'cart.remove' | translate"
+          >
+            <mat-icon>delete_outline</mat-icon>
+          </button>
+        </div>
+      }
+    </div>
+
+    <div class="cart-sheet__footer">
+      <div class="cart-sheet__total">
+        <span>{{ 'common.total' | translate }}</span>
+        <span>
+          <span class="ltr-nums">{{ cartService.totalAmount() | tomanPrice }}</span>
+          {{ 'common.toman' | translate }}
+        </span>
+      </div>
+      <button type="button" class="cart-sheet__checkout" (click)="checkout()">
+        {{ 'cart.checkout' | translate }}
+      </button>
+    </div>
+  }
+</div>

@@ -1,0 +1,76 @@
+<div class="menu-shell">
+  @if (loading()) {
+    <div class="menu-shell__hero menu-shell__hero--skeleton"></div>
+    <div class="menu-shell__content">
+      <app-menu-grid-skeleton />
+    </div>
+  } @else if (error()) {
+    <app-error-state [title]="'menu.load_error' | translate" (retry)="retry()" />
+  } @else {
+    <header
+      class="menu-shell__hero"
+      [style.background-image]="
+        restaurant()?.cover_image ? 'url(' + restaurant()!.cover_image + ')' : null
+      "
+    >
+      <div class="menu-shell__hero-overlay">
+        <button type="button" class="menu-shell__lang-toggle" (click)="toggleLanguage()">
+          {{ translationService.currentLang() === 'fa' ? 'EN' : 'فا' }}
+        </button>
+        <div class="menu-shell__brand">
+          @if (restaurant()?.logo) {
+            <img class="menu-shell__logo" [src]="restaurant()!.logo!" [alt]="restaurant()!.name" />
+          }
+          <h1>{{ restaurant()?.name }}</h1>
+        </div>
+      </div>
+    </header>
+
+    <div class="menu-shell__search-bar">
+      <mat-icon>search</mat-icon>
+      <input
+        type="text"
+        [placeholder]="'menu.search_placeholder' | translate"
+        [value]="searchQuery()"
+        (input)="onSearchInput($any($event.target).value)"
+      />
+    </div>
+
+    @if (categories().length > 0) {
+      <nav class="menu-shell__categories no-scrollbar">
+        <button
+          type="button"
+          class="category-chip"
+          [class.category-chip--active]="selectedCategoryId() === ALL_CATEGORY"
+          (click)="selectCategory(ALL_CATEGORY)"
+        >
+          {{ 'menu.all_categories' | translate }}
+        </button>
+        @for (category of categories(); track category.id) {
+          <button
+            type="button"
+            class="category-chip"
+            [class.category-chip--active]="selectedCategoryId() === category.id"
+            (click)="selectCategory(category.id)"
+          >
+            {{ category.name }}
+          </button>
+        }
+      </nav>
+    }
+
+    <main class="menu-shell__content">
+      @if (filteredItems().length === 0) {
+        <app-empty-state [title]="'menu.empty_category' | translate" />
+      } @else {
+        <div class="menu-shell__grid">
+          @for (item of filteredItems(); track item.id; let i = $index) {
+            <app-item-card [item]="item" [index]="i" (select)="openItemDetail($event)" />
+          }
+        </div>
+      }
+    </main>
+
+    <app-sticky-cart-bar (viewCart)="openCart()" />
+  }
+</div>

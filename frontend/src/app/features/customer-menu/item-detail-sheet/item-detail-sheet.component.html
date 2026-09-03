@@ -1,0 +1,105 @@
+<div class="sheet">
+  <button type="button" class="sheet__close" (click)="close()" aria-label="close">
+    <mat-icon>close</mat-icon>
+  </button>
+
+  @if (menuItem.image) {
+    <div class="sheet__image" [style.background-image]="'url(' + menuItem.image + ')'"></div>
+  } @else {
+    <div class="sheet__image sheet__image--placeholder">🍽️</div>
+  }
+
+  <div class="sheet__body">
+    <h2 class="sheet__title">{{ menuItem.name }}</h2>
+    <p class="sheet__base-price">
+      <span class="ltr-nums">{{ menuItem.base_price | tomanPrice }}</span>
+      {{ 'common.toman' | translate }}
+    </p>
+
+    @if (menuItem.description) {
+      <p class="sheet__description">{{ menuItem.description }}</p>
+    }
+
+    @for (group of menuItem.option_groups; track group.id) {
+      <div class="option-group">
+        <div class="option-group__header">
+          <span class="option-group__name">{{ group.name }}</span>
+          @if (group.is_required) {
+            <span class="option-group__badge option-group__badge--required">{{
+              'common.required' | translate
+            }}</span>
+          } @else {
+            <span class="option-group__badge">{{ 'common.optional' | translate }}</span>
+          }
+        </div>
+
+        <div class="option-group__options">
+          @for (option of group.options; track option.id) {
+            <button
+              type="button"
+              class="option-chip"
+              [class.option-chip--selected]="isSelected(group.id, option.id)"
+              [class.option-chip--disabled]="!option.is_available"
+              [disabled]="!option.is_available"
+              (click)="
+                group.selection_type === 'SINGLE'
+                  ? selectSingle(group, option)
+                  : toggleMultiple(group, option)
+              "
+            >
+              <span class="option-chip__check">
+                @if (isSelected(group.id, option.id)) {
+                  <mat-icon>check</mat-icon>
+                }
+              </span>
+              <span class="option-chip__name">{{
+                option.is_available
+                  ? option.name
+                  : ('menu.sold_out' | translate) + ' · ' + option.name
+              }}</span>
+              @if (option.extra_price > 0) {
+                <span class="option-chip__price ltr-nums"
+                  >+{{ option.extra_price | tomanPrice }}</span
+                >
+              }
+            </button>
+          }
+        </div>
+      </div>
+    }
+
+    <div class="quantity-row">
+      <span class="quantity-row__label">{{ 'common.quantity' | translate }}</span>
+      <div class="stepper">
+        <button
+          type="button"
+          class="stepper__btn"
+          (click)="decrement()"
+          [disabled]="quantity() <= 1"
+          aria-label="decrease"
+        >
+          <mat-icon>remove</mat-icon>
+        </button>
+        <span class="stepper__value">{{ quantity() }}</span>
+        <button type="button" class="stepper__btn" (click)="increment()" aria-label="increase">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="sheet__footer">
+    <button
+      type="button"
+      class="add-to-cart-btn"
+      [disabled]="!canAddToCart()"
+      (click)="addToCart()"
+    >
+      <span>{{ 'menu.add_to_cart' | translate }}</span>
+      <span class="add-to-cart-btn__price">
+        <span class="ltr-nums">{{ totalPrice() | tomanPrice }}</span>
+        {{ 'common.toman' | translate }}
+      </span>
+    </button>
+  </div>
+</div>

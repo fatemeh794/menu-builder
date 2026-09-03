@@ -20,8 +20,10 @@
     "language": "Language"
   },
   "menu": {
+    "all_categories": "All",
     "search_placeholder": "Search for food...",
     "empty_category": "No items found in this category",
+    "load_error": "Failed to load the menu",
     "sold_out": "Sold out",
     "add_to_cart": "Add to cart",
     "view_cart": "View cart",

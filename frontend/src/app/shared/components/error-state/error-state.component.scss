@@ -1,0 +1,28 @@
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 3rem 1.5rem;
+}
+
+.error-state__icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.error-state__title {
+  margin: 0 0 1rem;
+  font-weight: 600;
+  color: var(--brand-text-muted);
+}
+
+.error-state__retry {
+  border: 1.5px solid var(--brand-primary);
+  color: var(--brand-primary);
+  background: transparent;
+  padding: 0.5rem 1.25rem;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+}

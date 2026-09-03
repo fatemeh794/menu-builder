@@ -1,0 +1,35 @@
+<button
+  type="button"
+  class="item-card"
+  [class.item-card--sold-out]="!item().is_available"
+  [style.--stagger]="index()"
+  (click)="select.emit(item())"
+>
+  <div class="item-card__image-wrap">
+    @if (item().image) {
+      <img
+        class="item-card__image"
+        [src]="item().image"
+        [alt]="item().name"
+        loading="lazy"
+        decoding="async"
+      />
+    } @else {
+      <div class="item-card__image item-card__image--placeholder">🍽️</div>
+    }
+    @if (!item().is_available) {
+      <span class="item-card__badge">{{ 'menu.sold_out' | translate }}</span>
+    }
+  </div>
+
+  <div class="item-card__body">
+    <h3 class="item-card__name">{{ item().name }}</h3>
+    @if (item().description) {
+      <p class="item-card__description">{{ item().description }}</p>
+    }
+    <span class="item-card__price">
+      <span class="ltr-nums">{{ item().base_price | tomanPrice }}</span>
+      {{ 'common.toman' | translate }}
+    </span>
+  </div>
+</button>
