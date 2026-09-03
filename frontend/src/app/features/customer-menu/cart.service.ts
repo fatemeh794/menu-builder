@@ -12,8 +12,8 @@ interface PersistedCart {
 @Injectable({ providedIn: 'root' })
 export class CartService {
   private storageKey = '';
-  private restaurantSlug = '';
-  private tableToken: string | null = null;
+  private currentRestaurantSlug = '';
+  private currentTableToken: string | null = null;
 
   readonly lines = signal<CartLine[]>([]);
 
@@ -27,12 +27,20 @@ export class CartService {
    * back to false on the next tick so the same class can retrigger. */
   readonly justAdded = signal(false);
 
+  get tableToken(): string | null {
+    return this.currentTableToken;
+  }
+
+  get restaurantSlug(): string {
+    return this.currentRestaurantSlug;
+  }
+
   /** Scopes the cart to one restaurant (+ table, if scanned via QR) so a
    * customer browsing two different restaurants in the same browser never
    * mixes carts. Call once when the menu shell resolves its route. */
   init(restaurantSlug: string, tableToken: string | null): void {
-    this.restaurantSlug = restaurantSlug;
-    this.tableToken = tableToken;
+    this.currentRestaurantSlug = restaurantSlug;
+    this.currentTableToken = tableToken;
     this.storageKey = `rm_cart_${restaurantSlug}_${tableToken ?? 'no-table'}`;
 
     const raw = localStorage.getItem(this.storageKey);
@@ -113,8 +121,8 @@ export class CartService {
   private persist(): void {
     if (!this.storageKey) return;
     const payload: PersistedCart = {
-      restaurantSlug: this.restaurantSlug,
-      tableToken: this.tableToken,
+      restaurantSlug: this.currentRestaurantSlug,
+      tableToken: this.currentTableToken,
       lines: this.lines(),
     };
     localStorage.setItem(this.storageKey, JSON.stringify(payload));

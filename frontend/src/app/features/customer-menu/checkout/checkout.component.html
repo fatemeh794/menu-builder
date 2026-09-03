@@ -1,0 +1,59 @@
+<div class="checkout">
+  <header class="checkout__header">
+    <a class="checkout__back" [routerLink]="['/menu', restaurantSlug]" aria-label="back">
+      <mat-icon>arrow_forward</mat-icon>
+    </a>
+    <h1>{{ 'checkout.title' | translate }}</h1>
+  </header>
+
+  @if (cartService.isEmpty()) {
+    <div class="checkout__empty">
+      <span>🛒</span>
+      <p>{{ 'cart.empty' | translate }}</p>
+      <a class="checkout__browse-link" [routerLink]="['/menu', restaurantSlug]">{{
+        'menu.view_cart' | translate
+      }}</a>
+    </div>
+  } @else {
+    <section class="checkout__summary">
+      <h2>{{ 'checkout.your_order' | translate }}</h2>
+      @for (line of cartService.lines(); track line.id) {
+        <div class="summary-line">
+          <span class="summary-line__name">{{ line.quantity }}x {{ line.menuItem.name }}</span>
+          <span class="summary-line__price ltr-nums">{{ line.lineTotal | tomanPrice }}</span>
+        </div>
+      }
+      <div class="summary-line summary-line--total">
+        <span>{{ 'common.total' | translate }}</span>
+        <span class="ltr-nums">{{ cartService.totalAmount() | tomanPrice }}</span>
+      </div>
+    </section>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="checkout__form">
+      <label class="field">
+        <span>{{ 'checkout.name' | translate }}</span>
+        <input type="text" formControlName="customer_name" />
+      </label>
+      <label class="field">
+        <span>{{ 'checkout.phone' | translate }}</span>
+        <input type="tel" formControlName="customer_phone" />
+      </label>
+      <label class="field">
+        <span>{{ 'checkout.note' | translate }}</span>
+        <textarea rows="2" formControlName="note"></textarea>
+      </label>
+
+      @if (error(); as errorKey) {
+        <p class="checkout__error">{{ errorKey | translate }}</p>
+      }
+
+      <button type="submit" class="checkout__submit" [disabled]="submitting()">
+        @if (submitting()) {
+          {{ 'checkout.placing_order' | translate }}
+        } @else {
+          {{ 'checkout.pay' | translate: { amount: (cartService.totalAmount() | tomanPrice) } }}
+        }
+      </button>
+    </form>
+  }
+</div>

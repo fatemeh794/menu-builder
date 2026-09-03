@@ -20,6 +20,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'menu/:slug/checkout',
+    loadComponent: () =>
+      import('./features/customer-menu/checkout/checkout.component').then(
+        (m) => m.CheckoutComponent,
+      ),
+  },
+  {
     path: 'orders/:token/result',
     loadComponent: () =>
       import('./features/customer-menu/payment-result/payment-result.component').then(

@@ -1,0 +1,29 @@
+<div class="result" [class.result--success]="success" [class.result--failed]="!success">
+  <div class="result__icon">
+    @if (success) {
+      <span class="result__check">✓</span>
+    } @else {
+      <span class="result__cross">✕</span>
+    }
+  </div>
+
+  <h1 class="result__title">
+    {{ (success ? 'order.payment_success' : 'order.payment_failed') | translate }}
+  </h1>
+
+  <div class="result__actions">
+    @if (!success) {
+      <button
+        type="button"
+        class="result__btn result__btn--primary"
+        [disabled]="retrying()"
+        (click)="retryPayment()"
+      >
+        {{ 'order.try_again' | translate }}
+      </button>
+    }
+    <a class="result__btn" [class.result__btn--primary]="success" [routerLink]="['/orders', token]">
+      {{ 'order.tracking_title' | translate }}
+    </a>
+  </div>
+</div>

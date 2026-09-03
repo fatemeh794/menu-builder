@@ -1,0 +1,52 @@
+<div class="tracking">
+  @if (loading()) {
+    <div class="tracking__skeleton"></div>
+  } @else if (error() || !order()) {
+    <app-error-state [title]="'menu.load_error' | translate" />
+  } @else {
+    @let currentOrder = order()!;
+
+    <header class="tracking__header">
+      <h1>{{ 'order.tracking_title' | translate }}</h1>
+      <span class="tracking__restaurant">{{ currentOrder.restaurant_name }}</span>
+    </header>
+
+    <div class="tracking__status-card">
+      @if (currentOrder.status === 'CANCELLED') {
+        <div class="tracking__cancelled">
+          <span>✕</span>
+          <p>{{ 'order.status.CANCELLED' | translate }}</p>
+        </div>
+      } @else {
+        <div class="stepper-track">
+          @for (step of statusSteps; track step; let i = $index) {
+            <div
+              class="stepper-track__step"
+              [class.stepper-track__step--done]="i <= currentStepIndex()"
+            >
+              <span class="stepper-track__dot"></span>
+              <span class="stepper-track__label">{{ 'order.status.' + step | translate }}</span>
+            </div>
+          }
+        </div>
+      }
+
+      <div class="tracking__paid" [class.tracking__paid--yes]="currentOrder.is_paid">
+        {{ (currentOrder.is_paid ? 'order.payment_success' : 'order.payment_failed') | translate }}
+      </div>
+    </div>
+
+    <section class="tracking__items">
+      @for (item of currentOrder.items; track item.id) {
+        <div class="tracking-item">
+          <span class="tracking-item__name">{{ item.quantity }}x {{ item.menu_item_name }}</span>
+          <span class="tracking-item__price ltr-nums">{{ item.line_total | tomanPrice }}</span>
+        </div>
+      }
+      <div class="tracking-item tracking-item--total">
+        <span>{{ 'common.total' | translate }}</span>
+        <span class="ltr-nums">{{ currentOrder.total_amount | tomanPrice }}</span>
+      </div>
+    </section>
+  }
+</div>

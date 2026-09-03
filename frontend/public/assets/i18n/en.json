@@ -43,7 +43,10 @@
     "phone": "Phone",
     "note": "Note (optional)",
     "pay": "Pay {{amount}} Toman",
-    "placing_order": "Placing your order..."
+    "placing_order": "Placing your order...",
+    "no_table": "Scan the QR code on your table to place an order",
+    "order_failed": "Couldn't place the order. Please try again",
+    "payment_start_failed": "Couldn't start payment. Your order was saved, you can pay again later"
   },
   "order": {
     "status": {
