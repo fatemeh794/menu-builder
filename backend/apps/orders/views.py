@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from drf_spectacular.utils import extend_schema
 from rest_framework import generics, permissions, status, viewsets
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
@@ -22,6 +23,7 @@ class OrderCreateView(APIView):
 
     permission_classes = [permissions.AllowAny]
 
+    @extend_schema(request=OrderCreateSerializer, responses=OrderTrackSerializer)
     def post(self, request):
         serializer = OrderCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)

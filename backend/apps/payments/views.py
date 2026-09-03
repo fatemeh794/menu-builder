@@ -1,10 +1,12 @@
 from django.conf import settings
 from django.shortcuts import get_object_or_404, redirect
+from drf_spectacular.utils import OpenApiResponse, extend_schema
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.orders.models import Order
+from apps.payments.serializers import PaymentRedirectSerializer
 from apps.payments.services import (
     PaymentServiceError,
     handle_gateway_callback,
@@ -19,6 +21,13 @@ class PaymentCreateView(APIView):
 
     permission_classes = [permissions.AllowAny]
 
+    @extend_schema(
+        request=None,
+        responses={
+            201: PaymentRedirectSerializer,
+            400: OpenApiResponse(description="Order already paid, or has no payable amount"),
+        },
+    )
     def post(self, request, token):
         order = get_object_or_404(Order, secure_order_token=token)
         try:
@@ -34,6 +43,11 @@ class PaymentCallbackView(APIView):
 
     permission_classes = [permissions.AllowAny]
 
+    @extend_schema(
+        responses={302: OpenApiResponse(description="Redirects to the frontend result page")},
+        description="Not meant to be called directly - Zarinpal redirects the customer's "
+        "browser here after payment.",
+    )
     def get(self, request):
         authority = request.query_params.get("Authority", "")
         gateway_status = request.query_params.get("Status", "")
