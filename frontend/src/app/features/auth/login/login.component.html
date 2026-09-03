@@ -1,0 +1,43 @@
+<div class="login-page">
+  <mat-card class="login-card">
+    <div class="login-card__brand">
+      <span class="login-card__logo">🍽️</span>
+      <h1>{{ 'dashboard.login.title' | translate }}</h1>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="login-card__form">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'dashboard.login.username' | translate }}</mat-label>
+        <input matInput formControlName="username" autocomplete="username" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'dashboard.login.password' | translate }}</mat-label>
+        <input
+          matInput
+          type="password"
+          formControlName="password"
+          autocomplete="current-password"
+        />
+      </mat-form-field>
+
+      @if (error(); as errorKey) {
+        <p class="login-card__error">{{ errorKey | translate }}</p>
+      }
+
+      <button
+        mat-flat-button
+        color="primary"
+        type="submit"
+        [disabled]="loading()"
+        class="login-card__submit"
+      >
+        @if (loading()) {
+          <mat-spinner diameter="20"></mat-spinner>
+        } @else {
+          {{ 'dashboard.login.submit' | translate }}
+        }
+      </button>
+    </form>
+  </mat-card>
+</div>

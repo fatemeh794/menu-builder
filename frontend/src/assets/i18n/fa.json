@@ -1,0 +1,77 @@
+{
+  "common": {
+    "add": "افزودن",
+    "cancel": "انصراف",
+    "save": "ذخیره",
+    "edit": "ویرایش",
+    "delete": "حذف",
+    "close": "بستن",
+    "back": "بازگشت",
+    "search": "جستجو",
+    "loading": "در حال بارگذاری...",
+    "retry": "تلاش دوباره",
+    "confirm": "تأیید",
+    "toman": "تومان",
+    "required": "الزامی",
+    "optional": "اختیاری",
+    "quantity": "تعداد",
+    "total": "جمع کل",
+    "download": "دانلود",
+    "language": "زبان"
+  },
+  "menu": {
+    "search_placeholder": "جستجوی غذا...",
+    "empty_category": "غذایی در این دسته یافت نشد",
+    "sold_out": "ناموجود",
+    "add_to_cart": "افزودن به سبد",
+    "view_cart": "مشاهده سبد",
+    "items_count": "{{count}} مورد"
+  },
+  "cart": {
+    "title": "سبد خرید شما",
+    "empty": "سبد خرید شما خالی است",
+    "empty_hint": "برای شروع، غذای مورد علاقه خود را انتخاب کنید",
+    "checkout": "ادامه و پرداخت",
+    "remove": "حذف از سبد"
+  },
+  "checkout": {
+    "title": "تکمیل سفارش",
+    "your_order": "سفارش شما",
+    "name": "نام",
+    "phone": "شماره تماس",
+    "note": "توضیحات (اختیاری)",
+    "pay": "پرداخت {{amount}} تومان",
+    "placing_order": "در حال ثبت سفارش..."
+  },
+  "order": {
+    "status": {
+      "PENDING": "در انتظار تأیید",
+      "CONFIRMED": "تأیید شده",
+      "PREPARING": "در حال آماده‌سازی",
+      "READY": "آماده تحویل",
+      "COMPLETED": "تکمیل شده",
+      "CANCELLED": "لغو شده"
+    },
+    "tracking_title": "پیگیری سفارش",
+    "payment_success": "پرداخت با موفقیت انجام شد",
+    "payment_failed": "پرداخت ناموفق بود",
+    "try_again": "تلاش مجدد برای پرداخت"
+  },
+  "dashboard": {
+    "nav": {
+      "orders": "سفارش‌ها",
+      "menu": "منو",
+      "categories": "دسته‌بندی‌ها",
+      "tables": "میزها",
+      "staff": "کارکنان",
+      "settings": "تنظیمات"
+    },
+    "login": {
+      "title": "ورود پرسنل",
+      "username": "نام کاربری",
+      "password": "رمز عبور",
+      "submit": "ورود",
+      "error": "نام کاربری یا رمز عبور اشتباه است"
+    }
+  }
+}

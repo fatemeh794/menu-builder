@@ -1,0 +1,73 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+// Dashboard-facing theme (staff side). The customer-facing menu overrides
+// its own look via CSS custom properties set at runtime per restaurant -
+// see ThemeService - rather than a second Material theme.
+$frontend-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: light,
+      primary: mat.$azure-palette,
+      tertiary: mat.$blue-palette,
+    ),
+    density: (
+      scale: 0,
+    ),
+  )
+);
+
+:root {
+  @include mat.all-component-themes($frontend-theme);
+
+  // Per-restaurant theme tokens (ThemeService overrides these at runtime).
+  // Defaults double as the dashboard/marketing brand color.
+  --brand-primary: #e63946;
+  --brand-secondary: #1d3557;
+  --brand-background: #ffffff;
+  --brand-radius: 16px;
+  --brand-surface: #ffffff;
+  --brand-surface-muted: #f7f5f3;
+  --brand-text: #1a1a1a;
+  --brand-text-muted: #6b6b6b;
+  --brand-border: rgba(0, 0, 0, 0.08);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Vazirmatn', Roboto, 'Helvetica Neue', sans-serif;
+  background: var(--brand-surface-muted);
+  color: var(--brand-text);
+  -webkit-tap-highlight-color: transparent;
+}
+
+[dir='ltr'] body {
+  font-family: Roboto, 'Vazirmatn', 'Helvetica Neue', sans-serif;
+}
+
+// Thin, unobtrusive scrollbars for the category rail / option chips.
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+a {
+  color: inherit;
+}
