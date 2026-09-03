@@ -1,0 +1,92 @@
+name: Backend
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "backend/**"
+      - ".github/workflows/backend.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "backend/**"
+      - ".github/workflows/backend.yml"
+
+defaults:
+  run:
+    working-directory: backend
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: restaurant_menu_ci
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DJANGO_SECRET_KEY: ci-test-secret-key
+      DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1
+      POSTGRES_DB: restaurant_menu_ci
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: 5432
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: backend/requirements-dev.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
+
+      - name: Lint (ruff)
+        run: ruff check .
+
+      - name: Format check (black)
+        run: black --check .
+
+      # These run against the real Postgres service (config.settings.dev)
+      # rather than the sqlite used by the pytest suite below, so
+      # migrations and the seed command are proven against the actual
+      # target database engine, not just sqlite.
+      - name: Django system check (Postgres)
+        run: python manage.py check
+        env:
+          DJANGO_SETTINGS_MODULE: config.settings.dev
+
+      - name: Apply migrations (Postgres)
+        run: python manage.py migrate --noinput
+        env:
+          DJANGO_SETTINGS_MODULE: config.settings.dev
+
+      - name: Seed demo data (Postgres)
+        run: python manage.py seed_demo
+        env:
+          DJANGO_SETTINGS_MODULE: config.settings.dev
+
+      - name: Run tests
+        run: pytest --cov=apps --cov-report=term-missing
+        env:
+          DJANGO_SETTINGS_MODULE: config.settings.test
+
+      - name: Collect static files (build check)
+        run: python manage.py collectstatic --noinput
+        env:
+          DJANGO_SETTINGS_MODULE: config.settings.prod
