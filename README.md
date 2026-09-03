@@ -233,16 +233,16 @@ The payment flow was additionally verified by hand against Zarinpal's real sandb
 
 ## CI/CD
 
-`.github/workflows/backend.yml` and `frontend.yml` run on every push/PR to `main`
-(path-scoped, so a frontend-only change doesn't trigger the backend pipeline and vice
-versa):
+Three workflows under `.github/workflows/`, all green on `main`:
 
-- **Backend**: ruff + black --check, a Django system check / migrate / demo-seed run
-  against a real Postgres service container (not just sqlite — this proves migrations
-  apply cleanly to the actual target database engine), the pytest suite, and
-  `collectstatic` as a build check.
-- **Frontend**: ESLint, Prettier format check, unit tests (headless Chrome), and a
-  production build.
+- **`backend.yml`** *(path-scoped to `backend/**`)* — ruff + black --check, a Django
+  system check / migrate / demo-seed run against a real Postgres service container (not
+  just sqlite — this proves migrations apply cleanly to the actual target database
+  engine), the pytest suite, and `collectstatic` as a build check.
+- **`frontend.yml`** *(path-scoped to `frontend/**`)* — ESLint, Prettier format check,
+  unit tests (headless Chrome), and a production build.
+- **`docker-build.yml`** *(every push/PR)* — builds both the backend and frontend Docker
+  images and validates `docker-compose.yml` with `docker compose config`.
 
 ## Security notes
 
