@@ -113,6 +113,25 @@ backend seeds a demo restaurant on first boot (see [Demo data](#demo-data) below
 The frontend container's nginx proxies `/api/`, `/admin/`, `/static/`, and `/media/` to
 the backend, so the browser only ever talks to port 8080.
 
+Verified end-to-end on a real Windows + Docker Desktop (WSL2) machine: both images
+build, all three containers come up healthy, migrations + demo seed run, and a full
+guest order (menu → cart → checkout → Zarinpal sandbox redirect) works through the
+built production Angular bundle served by nginx — not just the dev server.
+
+**Troubleshooting**:
+- **`.env` is stale after pulling changes** — if `docker compose up` behaves oddly (e.g.
+  an unexpected HTTPS redirect loop on the backend), diff your `.env` against
+  `.env.example`; a variable added there later won't retroactively appear in an `.env`
+  you copied earlier. Re-copying is safe since this project's `.env.example` only holds
+  placeholders.
+- **`exec /app/docker-entrypoint.sh: exec format error` on the backend container** — this
+  showed up once during development from a transient 0-byte file read while building
+  from a project folder synced by OneDrive/Dropbox/etc. It wasn't a real code or
+  line-ending problem (the file on disk was fine). Fix: `docker compose build --no-cache backend`,
+  then `docker compose up -d` again.
+- **First-time Docker Desktop setup on Windows** needs WSL2 enabled (`wsl --install`, from
+  an elevated prompt, then a restart) before Docker Desktop itself will start.
+
 ## Manual setup (without Docker)
 
 ### Backend
