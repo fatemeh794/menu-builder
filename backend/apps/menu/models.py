@@ -29,6 +29,10 @@ class MenuItem(UUIDModel, TimeStampedModel):
     image = models.ImageField(upload_to="menu/items/", blank=True, null=True)
     is_available = models.BooleanField(default=True, help_text="In stock right now")
     is_active = models.BooleanField(default=True, help_text="Visible on the menu at all")
+    is_customizable = models.BooleanField(
+        default=False,
+        help_text="Opens the build-your-own ingredient builder instead of the simple option sheet",
+    )
     order = models.PositiveIntegerField(default=0)
 
     class Meta:

@@ -56,6 +56,7 @@ class MenuItemPublicSerializer(serializers.ModelSerializer):
             "base_price",
             "image",
             "is_available",
+            "is_customizable",
             "option_groups",
         )
 
@@ -139,6 +140,7 @@ class MenuItemWriteSerializer(serializers.ModelSerializer):
             "image",
             "is_available",
             "is_active",
+            "is_customizable",
             "order",
         )
         read_only_fields = ("id",)

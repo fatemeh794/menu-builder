@@ -133,3 +133,26 @@ class TestDashboardMenuApi:
             f"/api/v1/dashboard/{restaurant_a.slug}/items/{item_b.id}/option-groups/"
         )
         assert response.status_code == 404
+
+    def test_is_customizable_can_be_set_and_is_visible_on_the_public_menu(
+        self, api_client, auth_client, make_restaurant, make_category, make_membership
+    ):
+        restaurant = make_restaurant()
+        category = make_category(restaurant)
+        client, user = auth_client()
+        make_membership(user, restaurant, role=RestaurantMembership.Role.OWNER)
+
+        create_response = client.post(
+            f"/api/v1/dashboard/{restaurant.slug}/items/",
+            {
+                "category": str(category.id),
+                "name": "Build Your Bowl",
+                "base_price": 150000,
+                "is_customizable": True,
+            },
+        )
+        assert create_response.status_code == 201
+        assert create_response.data["is_customizable"] is True
+
+        public_response = api_client.get(f"/api/v1/menu/{restaurant.slug}/items/")
+        assert public_response.data[0]["is_customizable"] is True
