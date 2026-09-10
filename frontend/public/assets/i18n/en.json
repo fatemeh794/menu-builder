@@ -31,7 +31,10 @@
     "sold_out": "Sold out",
     "add_to_cart": "Add to cart",
     "view_cart": "View cart",
-    "items_count": "{{count}} items"
+    "items_count": "{{count}} items",
+    "build_your_bowl": "Build your own",
+    "drag_hint": "Drag or tap an ingredient to add it to your plate",
+    "included": "Included"
   },
   "cart": {
     "title": "Your cart",
@@ -76,6 +79,9 @@
       "tables": "Tables",
       "staff": "Staff",
       "settings": "Settings"
+    },
+    "menu": {
+      "customizable": "Customizable (build-your-own)"
     },
     "login": {
       "title": "Staff login",

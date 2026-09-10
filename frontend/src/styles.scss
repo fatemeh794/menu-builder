@@ -82,6 +82,18 @@ a {
   color: inherit;
 }
 
+// Created via document.createElement by BowlBuilderComponent's fly-to-plate
+// animation - lives outside any component's view, so it needs a global rule.
+.flying-ingredient {
+  position: fixed;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--brand-primary, #e63946);
+  z-index: 200;
+  pointer-events: none;
+}
+
 // Our bottom-sheet content components (item detail, cart) own their own
 // background/border-radius/padding, so strip Material's defaults here
 // rather than fighting them per-component.

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatIconModule } from '@angular/material/icon';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { finalize, forkJoin } from 'rxjs';
 
@@ -38,6 +38,7 @@ const ALL_CATEGORY = 'ALL';
 })
 export class MenuShellComponent {
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   private readonly menuApi = inject(MenuApiService);
   private readonly themeService = inject(ThemeService);
   private readonly cartService = inject(CartService);
@@ -122,6 +123,10 @@ export class MenuShellComponent {
   }
 
   openItemDetail(item: MenuItem): void {
+    if (item.is_customizable) {
+      this.router.navigate(['/menu', this.restaurantSlug, 'build', item.id]);
+      return;
+    }
     this.bottomSheet.open(ItemDetailSheetComponent, {
       data: { menuItem: item },
       panelClass: 'brand-sheet-panel',

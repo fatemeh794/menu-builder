@@ -1,0 +1,429 @@
+:host {
+  display: block;
+  min-height: 100dvh;
+  background: var(--brand-surface-muted);
+}
+
+.builder {
+  max-width: 720px;
+  margin: 0 auto;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: calc(88px + var(--safe-bottom));
+}
+
+.builder__loading {
+  padding: 4rem 1.5rem;
+  text-align: center;
+  color: var(--brand-text-muted);
+}
+
+.builder__header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: calc(0.85rem + var(--safe-top)) 1.1rem 0.85rem;
+  background: var(--brand-surface);
+  border-bottom: 1px solid var(--brand-border);
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+.builder__back {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: none;
+  background: var(--brand-surface-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.builder__heading {
+  min-width: 0;
+
+  h1 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 800;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  span {
+    font-size: 0.75rem;
+    color: var(--brand-text-muted);
+  }
+}
+
+.builder__body {
+  flex: 1;
+  padding: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+/* ---------- plate ---------- */
+
+.plate-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.plate {
+  position: relative;
+  width: min(72vw, 260px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background-color: var(--brand-surface);
+  background-size: cover;
+  background-position: center;
+  box-shadow:
+    0 0 0 10px var(--brand-surface),
+    0 0 0 12px var(--brand-border),
+    0 18px 32px rgba(0, 0, 0, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+
+  &--drag-over {
+    box-shadow:
+      0 0 0 10px var(--brand-surface),
+      0 0 0 13px var(--brand-primary),
+      0 18px 32px rgba(0, 0, 0, 0.16);
+    transform: scale(1.03);
+  }
+
+  &--landed {
+    animation: plate-pulse 0.35s ease;
+  }
+}
+
+@keyframes plate-pulse {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.06);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.plate__placeholder {
+  font-size: 3rem;
+  opacity: 0.5;
+}
+
+.plate__token {
+  position: absolute;
+  inset: 0;
+  width: 40px;
+  height: 40px;
+  margin: auto;
+  transform: rotate(var(--angle)) translateY(-92px) rotate(calc(-1 * var(--angle)));
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--brand-surface);
+  border: 2px solid var(--brand-surface);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.22);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  animation: token-land 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+@keyframes token-land {
+  from {
+    opacity: 0;
+    transform: rotate(var(--angle)) translateY(-92px) rotate(calc(-1 * var(--angle))) scale(0.3);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(var(--angle)) translateY(-92px) rotate(calc(-1 * var(--angle))) scale(1);
+  }
+}
+
+.plate-zone__hint {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--brand-text-muted);
+  text-align: center;
+}
+
+.selected-strip {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  width: 100%;
+  padding-bottom: 0.15rem;
+}
+
+.selected-chip {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid var(--brand-border);
+  background: var(--brand-surface);
+  border-radius: 999px;
+  padding: 0.3rem 0.55rem 0.3rem 0.3rem;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.78rem;
+  animation: chip-in 0.2s ease;
+
+  img {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  &__emoji {
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+  }
+
+  &__name {
+    max-width: 90px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  mat-icon {
+    font-size: 15px;
+    width: 15px;
+    height: 15px;
+    color: var(--brand-text-muted);
+  }
+}
+
+@keyframes chip-in {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ---------- ingredient panel ---------- */
+
+.group-tabs {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  margin-bottom: 0.9rem;
+}
+
+.group-tab {
+  flex-shrink: 0;
+  border: 1.5px solid var(--brand-border);
+  background: var(--brand-surface);
+  border-radius: 999px;
+  padding: 0.45rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+
+  &--active {
+    background: var(--brand-primary);
+    border-color: var(--brand-primary);
+    color: #fff;
+  }
+
+  &__req {
+    color: inherit;
+    opacity: 0.7;
+    margin-inline-start: 0.15rem;
+  }
+}
+
+.ingredient-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.7rem;
+}
+
+@media (min-width: 480px) {
+  .ingredient-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.ingredient-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1.5px solid var(--brand-border);
+  background: var(--brand-surface);
+  border-radius: var(--brand-radius);
+  padding: 0.6rem 0.4rem 0.55rem;
+  cursor: grab;
+  font: inherit;
+  transition: transform 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease;
+
+  &:active {
+    cursor: grabbing;
+    transform: scale(0.96);
+  }
+
+  &--selected {
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 1px var(--brand-primary);
+  }
+
+  &--disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  &__thumb {
+    position: relative;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--brand-surface-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__check {
+    position: absolute;
+    inset: 0;
+    background: color-mix(in srgb, var(--brand-primary) 55%, transparent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  &__name {
+    font-size: 0.74rem;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.25;
+  }
+
+  &__price {
+    font-size: 0.68rem;
+    color: var(--brand-text-muted);
+  }
+
+  &--selected &__price {
+    color: var(--brand-primary);
+    font-weight: 600;
+  }
+}
+
+/* ---------- footer ---------- */
+
+.builder__footer {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.1rem calc(0.75rem + var(--safe-bottom));
+  background: var(--brand-surface);
+  border-top: 1px solid var(--brand-border);
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: var(--brand-surface-muted);
+  border-radius: 999px;
+  padding: 0.3rem;
+  flex-shrink: 0;
+
+  button {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: var(--brand-surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+
+  span {
+    min-width: 1.2rem;
+    text-align: center;
+    font-weight: 700;
+  }
+}
+
+.add-btn {
+  flex: 1;
+  height: 48px;
+  border: none;
+  border-radius: var(--brand-radius);
+  background: var(--brand-primary);
+  color: #fff;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.1rem;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}

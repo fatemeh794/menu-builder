@@ -37,6 +37,7 @@ export interface MenuItem {
   image: string | null;
   is_available: boolean;
   is_active?: boolean;
+  is_customizable: boolean;
   order?: number;
   option_groups: MenuItemOptionGroup[];
 }

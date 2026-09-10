@@ -27,6 +27,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'menu/:slug/build/:itemId',
+    loadComponent: () =>
+      import('./features/customer-menu/bowl-builder/bowl-builder.component').then(
+        (m) => m.BowlBuilderComponent,
+      ),
+  },
+  {
     path: 'orders/:token/result',
     loadComponent: () =>
       import('./features/customer-menu/payment-result/payment-result.component').then(
