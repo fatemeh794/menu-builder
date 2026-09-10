@@ -40,6 +40,12 @@ services:
     restart: unless-stopped
     depends_on:
       - backend
+    volumes:
+      # nginx serves uploaded media directly from the same volume the
+      # backend writes to - Django only serves /media/ itself in DEBUG
+      # mode (that's Django's own by-design restriction), so in this
+      # prod-settings container gunicorn has no route for it at all.
+      - media_data:/usr/share/nginx/media:ro
     ports:
       - "8080:80"
 
