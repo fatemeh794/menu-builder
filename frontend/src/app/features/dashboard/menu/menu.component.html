@@ -64,6 +64,15 @@
         </button>
         <button
           type="button"
+          class="item-row__icon-btn item-row__icon-btn--tune"
+          [class.item-row__icon-btn--customizable]="item.is_customizable"
+          (click)="toggleCustomizable(item)"
+          [attr.title]="'dashboard.menu.customizable' | translate"
+        >
+          <mat-icon>tune</mat-icon>
+        </button>
+        <button
+          type="button"
           class="item-row__icon-btn item-row__icon-btn--delete"
           (click)="removeItem(item)"
         >

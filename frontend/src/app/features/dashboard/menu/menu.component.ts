@@ -99,6 +99,12 @@ export class DashboardMenuComponent {
       .subscribe((updated) => this.patchItem(updated));
   }
 
+  toggleCustomizable(item: MenuItem): void {
+    this.api
+      .updateItem(this.restaurantSlug, item.id, { is_customizable: !item.is_customizable })
+      .subscribe((updated) => this.patchItem(updated));
+  }
+
   removeItem(item: MenuItem): void {
     this.api.deleteItem(this.restaurantSlug, item.id).subscribe(() => {
       this.items.set(this.items().filter((i) => i.id !== item.id));
