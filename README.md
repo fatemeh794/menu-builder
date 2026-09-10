@@ -110,8 +110,10 @@ backend seeds a demo restaurant on first boot (see [Demo data](#demo-data) below
 - API docs: http://localhost:8000/api/docs/
 - Django admin: http://localhost:8000/admin/
 
-The frontend container's nginx proxies `/api/`, `/admin/`, `/static/`, and `/media/` to
-the backend, so the browser only ever talks to port 8080.
+The frontend container's nginx proxies `/api/`, `/admin/`, and `/static/` to the backend,
+so the browser only ever talks to port 8080. `/media/` (uploaded photos) is served by
+nginx directly from the `media_data` volume the backend writes into — Django itself only
+serves media in `DEBUG` mode, and this stack runs prod settings.
 
 Verified end-to-end on a real Windows + Docker Desktop (WSL2) machine: both images
 build, all three containers come up healthy, migrations + demo seed run, and a full
@@ -131,6 +133,14 @@ built production Angular bundle served by nginx — not just the dev server.
   then `docker compose up -d` again.
 - **First-time Docker Desktop setup on Windows** needs WSL2 enabled (`wsl --install`, from
   an elevated prompt, then a restart) before Docker Desktop itself will start.
+- **Menu item photos 404 or fail to load** — this bit us once too. Django's built-in media
+  server only runs when `DEBUG=True`, and this stack intentionally runs prod settings, so
+  proxying `/media/` to the backend gets a 404 no matter what's on disk. nginx now serves
+  `/media/` directly from the shared `media_data` volume instead (see `frontend/nginx.conf`
+  and the `frontend` service's volume mount in `docker-compose.yml`). If you're debugging a
+  variant of this, also watch for nginx matching a `location ~* \.(jpg|png|...)$` regex
+  location *before* a `/media/` prefix location — regex locations win by default, so the
+  fix needs `location ^~ /media/` to force the prefix match to take priority.
 
 ## Manual setup (without Docker)
 
