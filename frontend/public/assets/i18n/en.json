@@ -33,8 +33,13 @@
     "view_cart": "View cart",
     "items_count": "{{count}} items",
     "build_your_bowl": "Build your own",
-    "drag_hint": "Drag or tap an ingredient to add it to your plate",
-    "included": "Included"
+    "drag_hint": "Drag & drop your favorite ingredients and create something amazing!",
+    "included": "Included",
+    "your_meal": "Your Meal",
+    "drag_drop": "Drag & Drop",
+    "clear_all": "Clear all",
+    "selected_ingredients": "Selected ingredients",
+    "no_ingredients_yet": "No ingredients added yet"
   },
   "cart": {
     "title": "Your cart",

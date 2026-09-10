@@ -11,8 +11,23 @@ import { MenuApiService } from '../menu-api.service';
 
 interface PlacedIngredient {
   groupId: string;
+  groupName: string;
   option: MenuItemOption;
   angle: number;
+}
+
+const GROUP_ICONS: [RegExp, string][] = [
+  [/bread|bun|base|rice|dough/i, 'bakery_dining'],
+  [/sauce|dressing|dip/i, 'water_drop'],
+  [/cheese|dairy/i, 'egg_alt'],
+  [/topping|extra|add[- ]?on|veg|salad/i, 'eco'],
+  [/size|portion/i, 'straighten'],
+  [/spice|spicy|heat/i, 'local_fire_department'],
+  [/drink|beverage/i, 'local_cafe'],
+];
+
+function groupIcon(name: string): string {
+  return GROUP_ICONS.find(([pattern]) => pattern.test(name))?.[1] ?? 'tune';
 }
 
 @Component({
@@ -43,21 +58,23 @@ export class BowlBuilderComponent {
 
   private readonly selections = signal<Record<string, string[]>>({});
 
-  readonly activeGroup = computed<MenuItemOptionGroup | null>(() => {
+  /** null means the "All" tab - every group's section renders at once. */
+  readonly visibleGroups = computed<MenuItemOptionGroup[]>(() => {
     const item = this.menuItem();
+    if (!item) return [];
     const groupId = this.activeGroupId();
-    if (!item || !groupId) return null;
-    return item.option_groups.find((g) => g.id === groupId) ?? null;
+    if (!groupId) return item.option_groups;
+    return item.option_groups.filter((g) => g.id === groupId);
   });
 
   readonly placedIngredients = computed<PlacedIngredient[]>(() => {
     const item = this.menuItem();
     if (!item) return [];
-    const flat: { groupId: string; option: MenuItemOption }[] = [];
+    const flat: { groupId: string; groupName: string; option: MenuItemOption }[] = [];
     for (const group of item.option_groups) {
       const ids = this.selections()[group.id] ?? [];
       for (const option of group.options) {
-        if (ids.includes(option.id)) flat.push({ groupId: group.id, option });
+        if (ids.includes(option.id)) flat.push({ groupId: group.id, groupName: group.name, option });
       }
     }
     return flat.map((entry, index) => ({
@@ -99,7 +116,7 @@ export class BowlBuilderComponent {
           initial[group.id] = def ? [def.id] : [];
         }
         this.selections.set(initial);
-        this.activeGroupId.set(item.option_groups[0]?.id ?? null);
+        this.activeGroupId.set(null);
       }
     });
   }
@@ -112,8 +129,16 @@ export class BowlBuilderComponent {
     return ingredientEmoji(name);
   }
 
-  selectGroup(groupId: string): void {
+  selectGroup(groupId: string | null): void {
     this.activeGroupId.set(groupId);
+  }
+
+  groupIconFor(name: string): string {
+    return groupIcon(name);
+  }
+
+  clearAll(): void {
+    this.selections.set({});
   }
 
   isSelected(groupId: string, optionId: string): boolean {

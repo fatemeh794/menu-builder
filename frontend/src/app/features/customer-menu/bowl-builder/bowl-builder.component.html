@@ -10,126 +10,202 @@
       <button type="button" class="builder__back" (click)="goBack()" aria-label="back">
         <mat-icon>arrow_back</mat-icon>
       </button>
-      <div class="builder__heading">
-        <h1>{{ item.name }}</h1>
-        <span>{{ 'menu.build_your_bowl' | translate }}</span>
-      </div>
+      <h1>{{ item.name }}</h1>
     </header>
 
-    <div class="builder__body">
-      <div class="plate-zone">
-        <div
-          #plate
-          class="plate"
-          [class.plate--drag-over]="draggedOverPlate()"
-          [class.plate--landed]="justLanded()"
-          (dragover)="onPlateDragOver($event)"
-          (dragleave)="onPlateDragLeave()"
-          (drop)="onPlateDrop($event)"
-          [style.background-image]="item.image ? 'url(' + item.image + ')' : null"
-        >
-          @if (!item.image) {
-            <span class="plate__placeholder">🍽️</span>
-          }
-          @for (p of placedIngredients(); track p.option.id) {
-            <div class="plate__token" [style.--angle.deg]="p.angle" [attr.title]="p.option.name">
-              @if (iconUrl(p.option.name); as url) {
-                <img [src]="url" [alt]="p.option.name" />
-              } @else {
-                <span>{{ iconEmoji(p.option.name) }}</span>
-              }
-            </div>
-          }
-        </div>
-
-        @if (placedIngredients().length) {
-          <div class="selected-strip no-scrollbar">
-            @for (p of placedIngredients(); track p.option.id) {
-              <button type="button" class="selected-chip" (click)="removeIngredient(p)">
-                @if (iconUrl(p.option.name); as url) {
-                  <img [src]="url" [alt]="p.option.name" />
-                } @else {
-                  <span class="selected-chip__emoji">{{ iconEmoji(p.option.name) }}</span>
-                }
-                <span class="selected-chip__name">{{ p.option.name }}</span>
-                <mat-icon>close</mat-icon>
-              </button>
-            }
-          </div>
-        } @else {
-          <p class="plate-zone__hint">{{ 'menu.drag_hint' | translate }}</p>
-        }
-      </div>
-
-      <div class="ingredient-panel">
-        <nav class="group-tabs no-scrollbar">
+    <div class="builder__layout">
+      <!-- Left: categorized ingredient picker -->
+      <aside class="ingredients-panel">
+        <nav class="category-tabs no-scrollbar">
+          <button
+            type="button"
+            class="category-tab"
+            [class.category-tab--active]="activeGroupId() === null"
+            (click)="selectGroup(null)"
+          >
+            <mat-icon>apps</mat-icon>
+            <span>{{ 'menu.all_categories' | translate }}</span>
+          </button>
           @for (group of item.option_groups; track group.id) {
             <button
               type="button"
-              class="group-tab"
-              [class.group-tab--active]="activeGroupId() === group.id"
+              class="category-tab"
+              [class.category-tab--active]="activeGroupId() === group.id"
               (click)="selectGroup(group.id)"
             >
-              {{ group.name }}
-              @if (group.is_required) {
-                <span class="group-tab__req">*</span>
-              }
+              <mat-icon>{{ groupIconFor(group.name) }}</mat-icon>
+              <span>{{ group.name }}</span>
             </button>
           }
         </nav>
 
-        @if (activeGroup(); as group) {
-          <div class="ingredient-grid">
-            @for (option of group.options; track option.id) {
-              <button
-                #card
-                type="button"
-                class="ingredient-card"
-                [class.ingredient-card--selected]="isSelected(group.id, option.id)"
-                [class.ingredient-card--disabled]="!option.is_available"
-                draggable="true"
-                (dragstart)="onDragStart($event, group, option)"
-                (click)="addIngredient(group, option, card)"
-              >
-                <div class="ingredient-card__thumb">
-                  @if (iconUrl(option.name); as url) {
-                    <img [src]="url" [alt]="option.name" loading="lazy" />
+        @for (group of visibleGroups(); track group.id) {
+          <section class="ingredient-section">
+            <h3>
+              {{ group.name }}
+              @if (group.is_required) {
+                <span class="ingredient-section__req">*</span>
+              }
+            </h3>
+            <div class="ingredient-list">
+              @for (option of group.options; track option.id) {
+                <button
+                  #row
+                  type="button"
+                  class="ingredient-row"
+                  [class.ingredient-row--selected]="isSelected(group.id, option.id)"
+                  [class.ingredient-row--disabled]="!option.is_available"
+                  draggable="true"
+                  (dragstart)="onDragStart($event, group, option)"
+                  (click)="addIngredient(group, option, row)"
+                >
+                  <span class="ingredient-row__thumb">
+                    @if (iconUrl(option.name); as url) {
+                      <img [src]="url" [alt]="option.name" loading="lazy" />
+                    } @else {
+                      <span>{{ iconEmoji(option.name) }}</span>
+                    }
+                    @if (isSelected(group.id, option.id)) {
+                      <span class="ingredient-row__check"><mat-icon>check</mat-icon></span>
+                    }
+                  </span>
+                  <span class="ingredient-row__meta">
+                    <span class="ingredient-row__name">{{ option.name }}</span>
+                    <span class="ingredient-row__price">
+                      @if (option.extra_price > 0) {
+                        <span class="ltr-nums">+{{ option.extra_price | tomanPrice }}</span>
+                      } @else {
+                        {{ 'menu.included' | translate }}
+                      }
+                    </span>
+                  </span>
+                </button>
+              }
+            </div>
+          </section>
+        }
+      </aside>
+
+      <!-- Center: the plate -->
+      <section class="plate-panel">
+        <h2>{{ 'menu.build_your_bowl' | translate }}</h2>
+        <p class="plate-panel__subtitle">{{ 'menu.drag_hint' | translate }}</p>
+
+        <div class="plate-wrap">
+          <div
+            #plate
+            class="plate"
+            [class.plate--drag-over]="draggedOverPlate()"
+            [class.plate--landed]="justLanded()"
+            (dragover)="onPlateDragOver($event)"
+            (dragleave)="onPlateDragLeave()"
+            (drop)="onPlateDrop($event)"
+            [style.background-image]="item.image ? 'url(' + item.image + ')' : null"
+          >
+            @if (!item.image) {
+              <span class="plate__placeholder">🍽️</span>
+            }
+            @for (p of placedIngredients(); track p.option.id) {
+              <div class="plate__token" [style.--angle.deg]="p.angle" [attr.title]="p.option.name">
+                @if (iconUrl(p.option.name); as url) {
+                  <img [src]="url" [alt]="p.option.name" />
+                } @else {
+                  <span>{{ iconEmoji(p.option.name) }}</span>
+                }
+              </div>
+            }
+          </div>
+          <span class="plate-wrap__badge">
+            <mat-icon>back_hand</mat-icon>
+            {{ 'menu.drag_drop' | translate }}
+          </span>
+        </div>
+
+        @if (placedIngredients().length) {
+          <div class="selected-strip">
+            <h4>{{ 'menu.selected_ingredients' | translate }}</h4>
+            <div class="selected-strip__row no-scrollbar">
+              @for (p of placedIngredients(); track p.option.id) {
+                <button type="button" class="selected-thumb" (click)="removeIngredient(p)">
+                  <span class="selected-thumb__img">
+                    @if (iconUrl(p.option.name); as url) {
+                      <img [src]="url" [alt]="p.option.name" />
+                    } @else {
+                      <span>{{ iconEmoji(p.option.name) }}</span>
+                    }
+                    <span class="selected-thumb__remove"><mat-icon>close</mat-icon></span>
+                  </span>
+                  <span class="selected-thumb__name">{{ p.option.name }}</span>
+                </button>
+              }
+            </div>
+          </div>
+        }
+      </section>
+
+      <!-- Right: the running order -->
+      <aside class="cart-panel">
+        <div class="cart-panel__header">
+          <h3>{{ 'menu.your_meal' | translate }}</h3>
+          @if (placedIngredients().length) {
+            <button type="button" class="cart-panel__clear" (click)="clearAll()">
+              <mat-icon>delete_outline</mat-icon>
+              {{ 'menu.clear_all' | translate }}
+            </button>
+          }
+        </div>
+
+        @if (placedIngredients().length) {
+          <ul class="cart-list">
+            @for (p of placedIngredients(); track p.option.id) {
+              <li class="cart-row">
+                <span class="cart-row__thumb">
+                  @if (iconUrl(p.option.name); as url) {
+                    <img [src]="url" [alt]="p.option.name" />
                   } @else {
-                    <span>{{ iconEmoji(option.name) }}</span>
+                    <span>{{ iconEmoji(p.option.name) }}</span>
                   }
-                  @if (isSelected(group.id, option.id)) {
-                    <span class="ingredient-card__check"><mat-icon>check</mat-icon></span>
-                  }
-                </div>
-                <span class="ingredient-card__name">{{ option.name }}</span>
-                <span class="ingredient-card__price">
-                  @if (option.extra_price > 0) {
-                    <span class="ltr-nums">+{{ option.extra_price | tomanPrice }}</span>
+                </span>
+                <span class="cart-row__meta">
+                  <span class="cart-row__name">{{ p.option.name }}</span>
+                  <span class="cart-row__group">{{ p.groupName }}</span>
+                </span>
+                <span class="cart-row__price">
+                  @if (p.option.extra_price > 0) {
+                    <span class="ltr-nums">+{{ p.option.extra_price | tomanPrice }}</span>
                   } @else {
                     {{ 'menu.included' | translate }}
                   }
                 </span>
-              </button>
+                <button type="button" class="cart-row__remove" (click)="removeIngredient(p)" aria-label="remove">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </li>
             }
-          </div>
+          </ul>
+        } @else {
+          <p class="cart-panel__empty">{{ 'menu.no_ingredients_yet' | translate }}</p>
         }
-      </div>
-    </div>
 
-    <footer class="builder__footer">
-      <div class="stepper">
-        <button type="button" (click)="decrement()" [disabled]="quantity() <= 1" aria-label="decrease">
-          <mat-icon>remove</mat-icon>
-        </button>
-        <span>{{ quantity() }}</span>
-        <button type="button" (click)="increment()" aria-label="increase">
-          <mat-icon>add</mat-icon>
-        </button>
-      </div>
-      <button type="button" class="add-btn" [disabled]="!canAddToCart()" (click)="addToCart()">
-        <span>{{ 'menu.add_to_cart' | translate }}</span>
-        <span class="ltr-nums">{{ totalPrice() | tomanPrice }}</span>
-      </button>
-    </footer>
+        <div class="cart-panel__summary">
+          <div class="stepper">
+            <button type="button" (click)="decrement()" [disabled]="quantity() <= 1" aria-label="decrease">
+              <mat-icon>remove</mat-icon>
+            </button>
+            <span>{{ quantity() }}</span>
+            <button type="button" (click)="increment()" aria-label="increase">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+          <div class="total-row">
+            <span>{{ 'common.total' | translate }}</span>
+            <span class="ltr-nums">{{ totalPrice() | tomanPrice }}</span>
+          </div>
+          <button type="button" class="add-btn" [disabled]="!canAddToCart()" (click)="addToCart()">
+            {{ 'menu.add_to_cart' | translate }}
+          </button>
+        </div>
+      </aside>
+    </div>
   }
 </div>
