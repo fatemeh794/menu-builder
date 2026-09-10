@@ -1,4 +1,9 @@
+import io
+import time
+
+import requests
 from django.contrib.auth import get_user_model
+from django.core.files.images import ImageFile
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
@@ -12,12 +17,16 @@ DEMO_OWNER_USERNAME = "owner"
 DEMO_OWNER_EMAIL = "owner@goldenfork.demo"
 DEMO_OWNER_PASSWORD = "DemoPass123!"
 
+IMAGE_FETCH_TIMEOUT_SECONDS = 8
+
 MENU = {
     "Burgers": [
         {
             "name": "Classic Burger",
             "description": "Juicy beef patty, cheddar, lettuce, tomato",
             "price": 129000,
+            "image_url": "https://loremflickr.com/500/400/burger,food?lock=205",
+            "is_customizable": True,
             "option_groups": [
                 {
                     "name": "Bread type",
@@ -48,6 +57,7 @@ MENU = {
             "name": "Cheese Burger",
             "description": "Double cheddar, pickles, house sauce",
             "price": 139000,
+            "image_url": "https://loremflickr.com/500/400/cheeseburger?lock=33",
             "option_groups": [],
         },
     ],
@@ -56,6 +66,7 @@ MENU = {
             "name": "Margherita Pizza",
             "description": "Tomato, mozzarella, fresh basil",
             "price": 189000,
+            "image_url": "https://loremflickr.com/500/400/pizza?lock=777",
             "option_groups": [
                 {
                     "name": "Size",
@@ -69,6 +80,7 @@ MENU = {
             "name": "Pepperoni Pizza",
             "description": "Loaded with pepperoni and mozzarella",
             "price": 209000,
+            "image_url": "https://loremflickr.com/500/400/pepperoni,pizza?lock=88",
             "option_groups": [],
         },
     ],
@@ -77,6 +89,7 @@ MENU = {
             "name": "Caesar Salad",
             "description": "Romaine, parmesan, croutons, Caesar dressing",
             "price": 99000,
+            "image_url": "https://loremflickr.com/500/400/salad?lock=15",
             "option_groups": [],
         },
     ],
@@ -85,12 +98,14 @@ MENU = {
             "name": "Fresh Orange Juice",
             "description": "Freshly squeezed",
             "price": 49000,
+            "image_url": "https://loremflickr.com/500/400/orange,juice?lock=61",
             "option_groups": [],
         },
         {
             "name": "Sparkling Water",
             "description": "",
             "price": 29000,
+            "image_url": "https://loremflickr.com/500/400/watercarafe?lock=3",
             "option_groups": [],
         },
     ],
@@ -99,6 +114,7 @@ MENU = {
             "name": "Chocolate Lava Cake",
             "description": "Warm cake with a molten chocolate center",
             "price": 79000,
+            "image_url": "https://loremflickr.com/500/400/cake?lock=91",
             "option_groups": [],
         },
     ],
@@ -151,6 +167,25 @@ class Command(BaseCommand):
             user=user, restaurant=restaurant, defaults={"role": RestaurantMembership.Role.OWNER}
         )
 
+    def _fetch_image(self, url: str, filename: str, attempts: int = 3) -> ImageFile | None:
+        """Best-effort download for demo photography - a network hiccup here
+        should never break the whole seed, just leave that item without a
+        photo (the frontend already has a placeholder for that case).
+        LoremFlickr occasionally 500s transiently, so a couple of retries
+        clear up most failures without needing a manual re-run."""
+        last_error: Exception | None = None
+        for attempt in range(1, attempts + 1):
+            try:
+                response = requests.get(url, timeout=IMAGE_FETCH_TIMEOUT_SECONDS)
+                response.raise_for_status()
+                return ImageFile(io.BytesIO(response.content), name=filename)
+            except requests.RequestException as exc:
+                last_error = exc
+                if attempt < attempts:
+                    time.sleep(1.5 * attempt)
+        self.stdout.write(self.style.WARNING(f"  Could not fetch demo photo {url}: {last_error}"))
+        return None
+
     def _seed_menu(self, restaurant: Restaurant) -> None:
         for order, (category_name, items) in enumerate(MENU.items()):
             category, _ = Category.objects.get_or_create(
@@ -164,10 +199,23 @@ class Command(BaseCommand):
                     defaults={
                         "description": item_data["description"],
                         "base_price": item_data["price"],
+                        "is_customizable": item_data.get("is_customizable", False),
                     },
                 )
+                # Backfill the photo even on a re-run of an already-existing
+                # item - a prior run may have created the row but failed to
+                # download its image (LoremFlickr occasionally 500s), and
+                # `created` alone would otherwise skip it forever.
+                image_url = item_data.get("image_url")
+                if image_url and not item.image:
+                    slug = item_data["name"].lower().replace(" ", "-")
+                    image_file = self._fetch_image(image_url, f"{slug}.jpg")
+                    if image_file:
+                        item.image.save(image_file.name, image_file, save=True)
+
                 if not created:
                     continue
+
                 for group_data in item_data["option_groups"]:
                     group = MenuItemOptionGroup.objects.create(
                         menu_item=item,
