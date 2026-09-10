@@ -55,7 +55,7 @@ class TestSeedDemoCommand:
         call_command("seed_demo")
 
         restaurant = Restaurant.objects.get(slug="golden-fork")
-        burger = MenuItem.objects.get(restaurant=restaurant, name="Classic Burger")
+        burger = MenuItem.objects.get(restaurant=restaurant, name="برگر کلاسیک")
         assert burger.image
         assert burger.is_customizable is True
 
@@ -77,7 +77,7 @@ class TestSeedDemoCommand:
             call_command("seed_demo")
 
         restaurant = Restaurant.objects.get(slug="golden-fork")
-        burger = MenuItem.objects.get(restaurant=restaurant, name="Classic Burger")
+        burger = MenuItem.objects.get(restaurant=restaurant, name="برگر کلاسیک")
         assert not burger.image
 
         call_command("seed_demo")

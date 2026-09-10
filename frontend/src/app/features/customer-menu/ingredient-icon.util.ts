@@ -10,19 +10,19 @@ interface IconEntry {
 }
 
 const ICONS: IconEntry[] = [
-  { keywords: ['whole wheat', 'wheat'], url: 'https://loremflickr.com/300/300/wholewheat,bread?lock=8', emoji: '🍞' },
-  { keywords: ['gluten'], url: 'https://loremflickr.com/300/300/glutenfree,bread?lock=6', emoji: '🍞' },
-  { keywords: ['regular', 'bun', 'bread'], url: 'https://loremflickr.com/300/300/bread,bun?lock=12', emoji: '🍞' },
-  { keywords: ['garlic mayo', 'aioli'], url: 'https://loremflickr.com/300/300/aioli,sauce?lock=2', emoji: '🥣' },
-  { keywords: ['spicy', 'hot sauce'], url: 'https://loremflickr.com/300/300/hotsauce?lock=21', emoji: '🌶️' },
-  { keywords: ['bbq'], url: 'https://loremflickr.com/300/300/bbqsauce?lock=7', emoji: '🍖' },
-  { keywords: ['ketchup', 'tomato sauce'], url: 'https://loremflickr.com/300/300/tomatosauce,condiment?lock=4', emoji: '🍅' },
-  { keywords: ['mayo'], url: 'https://loremflickr.com/300/300/aioli,sauce?lock=2', emoji: '🥣' },
-  { keywords: ['tomato'], url: 'https://loremflickr.com/300/300/tomato,fresh?lock=31', emoji: '🍅' },
-  { keywords: ['lettuce', 'salad', 'greens'], url: 'https://loremflickr.com/300/300/lettuce,salad?lock=23', emoji: '🥬' },
-  { keywords: ['cheese', 'mozzarella', 'cheddar', 'parmesan'], url: 'https://loremflickr.com/300/300/cheese,food?lock=17', emoji: '🧀' },
-  { keywords: ['chicken'], url: 'https://loremflickr.com/300/300/grilledchicken?lock=11', emoji: '🍗' },
-  { keywords: ['rice'], url: 'https://loremflickr.com/300/300/steamedrice?lock=13', emoji: '🍚' },
+  { keywords: ['whole wheat', 'wheat', 'سبوس'], url: 'https://loremflickr.com/300/300/wholewheat,bread?lock=8', emoji: '🍞' },
+  { keywords: ['gluten', 'گلوتن'], url: 'https://loremflickr.com/300/300/glutenfree,bread?lock=6', emoji: '🍞' },
+  { keywords: ['regular', 'bun', 'bread', 'معمولی', 'نان'], url: 'https://loremflickr.com/300/300/bread,bun?lock=12', emoji: '🍞' },
+  { keywords: ['garlic mayo', 'aioli', 'سس سیر', 'سیر'], url: 'https://loremflickr.com/300/300/aioli,sauce?lock=2', emoji: '🥣' },
+  { keywords: ['spicy', 'hot sauce', 'تند'], url: 'https://loremflickr.com/300/300/hotsauce?lock=21', emoji: '🌶️' },
+  { keywords: ['bbq', 'باربیکیو'], url: 'https://loremflickr.com/300/300/bbqsauce?lock=7', emoji: '🍖' },
+  { keywords: ['ketchup', 'tomato sauce', 'کچاپ'], url: 'https://loremflickr.com/300/300/tomatosauce,condiment?lock=4', emoji: '🍅' },
+  { keywords: ['mayo', 'مایونز'], url: 'https://loremflickr.com/300/300/aioli,sauce?lock=2', emoji: '🥣' },
+  { keywords: ['tomato', 'گوجه'], url: 'https://loremflickr.com/300/300/tomato,fresh?lock=31', emoji: '🍅' },
+  { keywords: ['lettuce', 'salad', 'greens', 'کاهو', 'سالاد'], url: 'https://loremflickr.com/300/300/lettuce,salad?lock=23', emoji: '🥬' },
+  { keywords: ['cheese', 'mozzarella', 'cheddar', 'parmesan', 'پنیر', 'موزارلا', 'پارمزان'], url: 'https://loremflickr.com/300/300/cheese,food?lock=17', emoji: '🧀' },
+  { keywords: ['chicken', 'مرغ'], url: 'https://loremflickr.com/300/300/grilledchicken?lock=11', emoji: '🍗' },
+  { keywords: ['rice', 'برنج'], url: 'https://loremflickr.com/300/300/steamedrice?lock=13', emoji: '🍚' },
 ];
 
 const FALLBACK_EMOJI = '🍽️';

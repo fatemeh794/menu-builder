@@ -20,99 +20,99 @@ DEMO_OWNER_PASSWORD = "DemoPass123!"
 IMAGE_FETCH_TIMEOUT_SECONDS = 8
 
 MENU = {
-    "Burgers": [
+    "برگرها": [
         {
-            "name": "Classic Burger",
-            "description": "Juicy beef patty, cheddar, lettuce, tomato",
+            "name": "برگر کلاسیک",
+            "description": "پاتی گوشت گوساله آبدار، پنیر چدار، کاهو و گوجه",
             "price": 129000,
             "image_url": "https://loremflickr.com/500/400/burger,food?lock=205",
             "is_customizable": True,
             "option_groups": [
                 {
-                    "name": "Bread type",
+                    "name": "نوع نان",
                     "type": "SINGLE",
                     "required": True,
                     "options": [
-                        ("Regular", 0, True),
-                        ("Whole wheat", 10000, False),
-                        ("Gluten free", 20000, False),
+                        ("معمولی", 0, True),
+                        ("سبوس‌دار", 10000, False),
+                        ("بدون گلوتن", 20000, False),
                     ],
                 },
                 {
-                    "name": "Sauce",
+                    "name": "سس",
                     "type": "MULTIPLE",
                     "required": False,
                     "min_select": 0,
                     "max_select": 3,
                     "options": [
-                        ("Ketchup", 0, False),
-                        ("BBQ", 10000, False),
-                        ("Garlic Mayo", 10000, False),
-                        ("Spicy Mayo", 10000, False),
+                        ("کچاپ", 0, False),
+                        ("باربیکیو", 10000, False),
+                        ("سس سیر", 10000, False),
+                        ("مایونز تند", 10000, False),
                     ],
                 },
             ],
         },
         {
-            "name": "Cheese Burger",
-            "description": "Double cheddar, pickles, house sauce",
+            "name": "چیزبرگر",
+            "description": "دو لایه پنیر چدار، خیارشور و سس مخصوص",
             "price": 139000,
             "image_url": "https://loremflickr.com/500/400/cheeseburger?lock=33",
             "option_groups": [],
         },
     ],
-    "Pizzas": [
+    "پیتزاها": [
         {
-            "name": "Margherita Pizza",
-            "description": "Tomato, mozzarella, fresh basil",
+            "name": "پیتزا مارگاریتا",
+            "description": "گوجه، موزارلا و ریحان تازه",
             "price": 189000,
             "image_url": "https://loremflickr.com/500/400/pizza?lock=777",
             "option_groups": [
                 {
-                    "name": "Size",
+                    "name": "اندازه",
                     "type": "SINGLE",
                     "required": True,
-                    "options": [("Medium", 0, True), ("Large", 40000, False)],
+                    "options": [("متوسط", 0, True), ("بزرگ", 40000, False)],
                 },
             ],
         },
         {
-            "name": "Pepperoni Pizza",
-            "description": "Loaded with pepperoni and mozzarella",
+            "name": "پیتزا پپرونی",
+            "description": "مملو از پپرونی و پنیر موزارلا",
             "price": 209000,
             "image_url": "https://loremflickr.com/500/400/pepperoni,pizza?lock=88",
             "option_groups": [],
         },
     ],
-    "Salads": [
+    "سالادها": [
         {
-            "name": "Caesar Salad",
-            "description": "Romaine, parmesan, croutons, Caesar dressing",
+            "name": "سالاد سزار",
+            "description": "کاهوی رومی، پنیر پارمزان، نان تست و سس سزار",
             "price": 99000,
             "image_url": "https://loremflickr.com/500/400/salad?lock=15",
             "option_groups": [],
         },
     ],
-    "Drinks": [
+    "نوشیدنی‌ها": [
         {
-            "name": "Fresh Orange Juice",
-            "description": "Freshly squeezed",
+            "name": "آب پرتقال تازه",
+            "description": "تازه‌گرفته‌شده",
             "price": 49000,
             "image_url": "https://loremflickr.com/500/400/orange,juice?lock=61",
             "option_groups": [],
         },
         {
-            "name": "Sparkling Water",
+            "name": "آب گازدار",
             "description": "",
             "price": 29000,
             "image_url": "https://loremflickr.com/500/400/watercarafe?lock=3",
             "option_groups": [],
         },
     ],
-    "Desserts": [
+    "دسرها": [
         {
-            "name": "Chocolate Lava Cake",
-            "description": "Warm cake with a molten chocolate center",
+            "name": "کیک لاوا شکلاتی",
+            "description": "کیک گرم با مغز شکلات مذاب",
             "price": 79000,
             "image_url": "https://loremflickr.com/500/400/cake?lock=91",
             "option_groups": [],
@@ -146,7 +146,7 @@ class Command(BaseCommand):
             slug="golden-fork",
             defaults=dict(
                 name="Golden Fork",
-                description="Premium burgers, pizzas, and more.",
+                description="برگر و پیتزای درجه یک و موارد دیگر.",
                 theme_primary_color="#E63946",
                 theme_secondary_color="#1D3557",
                 theme_background_color="#FFFFFF",
