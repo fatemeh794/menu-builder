@@ -59,6 +59,11 @@
       </nav>
     }
 
+    <button type="button" class="plate3d-banner" (click)="openPlate3d()">
+      <mat-icon>view_in_ar</mat-icon>
+      {{ 'menu.try_3d_plate' | translate }}
+    </button>
+
     <main class="menu-shell__content">
       @if (filteredItems().length === 0) {
         <app-empty-state [title]="'menu.empty_category' | translate" />

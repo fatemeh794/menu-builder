@@ -1,0 +1,12 @@
+<div class="relative h-full w-full">
+  <canvas
+    #canvas
+    class="block h-full w-full touch-none"
+    (dragover)="onDragOver($event)"
+    (drop)="onDrop($event)"
+    (pointerdown)="onPointerDown($event)"
+    (pointermove)="onPointerMove($event)"
+    (pointerup)="onPointerUp()"
+    (pointercancel)="onPointerUp()"
+  ></canvas>
+</div>

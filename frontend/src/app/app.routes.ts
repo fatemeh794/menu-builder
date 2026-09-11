@@ -34,6 +34,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'menu/:slug/plate3d',
+    loadComponent: () =>
+      import('./features/customer-menu/food-plate-3d/food-plate-page/food-plate-page.component').then(
+        (m) => m.FoodPlatePageComponent,
+      ),
+  },
+  {
     path: 'orders/:token/result',
     loadComponent: () =>
       import('./features/customer-menu/payment-result/payment-result.component').then(

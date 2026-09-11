@@ -133,6 +133,10 @@ export class MenuShellComponent {
     });
   }
 
+  openPlate3d(): void {
+    this.router.navigate(['/menu', this.restaurantSlug, 'plate3d']);
+  }
+
   openCart(): void {
     this.bottomSheet.open(CartSheetComponent, {
       data: { restaurantSlug: this.restaurantSlug },

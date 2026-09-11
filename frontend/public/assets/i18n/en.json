@@ -39,7 +39,34 @@
     "drag_drop": "Drag & Drop",
     "clear_all": "Clear all",
     "selected_ingredients": "Selected ingredients",
-    "no_ingredients_yet": "No ingredients added yet"
+    "no_ingredients_yet": "No ingredients added yet",
+    "try_3d_plate": "Try the 3D plate builder"
+  },
+  "plate3d": {
+    "title": "Build Your Plate",
+    "subtitle": "Drag ingredients onto the plate, or tap to add",
+    "your_meal": "Your Meal",
+    "empty": "Your plate is empty",
+    "added": "Added to your meal",
+    "category": {
+      "protein": "Protein",
+      "base": "Base",
+      "veggies": "Veggies",
+      "extras": "Extras"
+    },
+    "ingredient": {
+      "chicken": "Chicken",
+      "beef": "Beef",
+      "egg": "Egg",
+      "rice": "Rice",
+      "fries": "French fries",
+      "tomato": "Tomato",
+      "lettuce": "Lettuce",
+      "cucumber": "Cucumber",
+      "mushroom": "Mushroom",
+      "onion": "Onion",
+      "cheese": "Cheese"
+    }
   },
   "cart": {
     "title": "Your cart",

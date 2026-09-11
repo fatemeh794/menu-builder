@@ -4,6 +4,13 @@
 
 @include mat.core();
 
+// Utility classes only (preflight disabled in tailwind.config.js) - scoped in
+// practice to the 3D food-plate feature, which is the only part of the app
+// that uses Tailwind instead of the existing SCSS/CSS-variable system.
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 // Dashboard-facing theme (staff side). The customer-facing menu overrides
 // its own look via CSS custom properties set at runtime per restaurant -
 // see ThemeService - rather than a second Material theme.

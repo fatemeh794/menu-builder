@@ -1,0 +1,48 @@
+<div
+  class="flex flex-col gap-3 rounded-3xl border border-white/10 bg-white/[0.07] p-5 shadow-2xl shadow-black/30 backdrop-blur-md"
+>
+  <h3 class="text-base font-bold text-white">{{ 'plate3d.your_meal' | translate }}</h3>
+
+  @if (interaction.summary().length) {
+    <ul class="flex flex-col gap-2">
+      @for (line of interaction.summary(); track line.ingredient.id) {
+        <li class="flex items-center justify-between gap-2 text-sm">
+          <span class="flex items-center gap-2 text-white/85">
+            <span>{{ line.ingredient.icon }}</span>
+            <span>{{ line.ingredient.nameKey | translate }}</span>
+            @if (line.count > 1) {
+              <span class="text-white/45 ltr-nums">×{{ line.count }}</span>
+            }
+          </span>
+          <span class="flex items-center gap-2">
+            <span class="font-medium text-white/85 ltr-nums">{{ line.subtotal | tomanPrice }}</span>
+            <button
+              type="button"
+              (click)="removeOne(line.ingredient.id)"
+              class="flex h-6 w-6 items-center justify-center rounded-full text-white/40 transition-colors hover:bg-white/10 hover:text-white"
+              [attr.aria-label]="'common.delete' | translate"
+            >
+              <mat-icon style="font-size: 15px; width: 15px; height: 15px">close</mat-icon>
+            </button>
+          </span>
+        </li>
+      }
+    </ul>
+  } @else {
+    <p class="text-sm text-white/45">{{ 'plate3d.empty' | translate }}</p>
+  }
+
+  <div class="mt-1 flex items-center justify-between border-t border-white/10 pt-3">
+    <span class="text-sm font-semibold text-white/70">{{ 'common.total' | translate }}</span>
+    <span class="text-lg font-bold text-white ltr-nums">{{ interaction.total() | tomanPrice }}</span>
+  </div>
+
+  <button
+    type="button"
+    [disabled]="!interaction.summary().length"
+    (click)="addToCart.emit()"
+    class="mt-1 rounded-2xl bg-gradient-to-r from-rose-500 to-orange-400 py-3 text-sm font-bold text-white shadow-lg shadow-rose-500/20 transition-transform duration-150 enabled:hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-35"
+  >
+    {{ 'menu.add_to_cart' | translate }}
+  </button>
+</div>

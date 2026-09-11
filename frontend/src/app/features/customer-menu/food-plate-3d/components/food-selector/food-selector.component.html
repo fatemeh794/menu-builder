@@ -1,0 +1,26 @@
+<div class="flex flex-col gap-4">
+  <nav class="flex gap-2 overflow-x-auto no-scrollbar">
+    @for (category of interaction.categories; track category.id) {
+      <button
+        type="button"
+        (click)="selectCategory(category.id)"
+        class="shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition-colors duration-150"
+        [class]="
+          interaction.activeCategory() === category.id ? 'bg-white text-black' : 'bg-white/10 text-white/70'
+        "
+      >
+        {{ category.nameKey | translate }}
+      </button>
+    }
+  </nav>
+
+  <div class="flex gap-3 overflow-x-auto no-scrollbar pb-1 md:grid md:grid-cols-3 md:overflow-visible">
+    @for (ingredient of interaction.visibleIngredients(); track ingredient.id) {
+      <app-ingredient-card
+        [ingredient]="ingredient"
+        (pointerDown)="ingredientPointerDown.emit({ ingredient, event: $event })"
+        (tapAdd)="ingredientTapAdd.emit($event)"
+      />
+    }
+  </div>
+</div>
