@@ -17,8 +17,17 @@ import { authInterceptor } from './core/interceptors/auth.interceptor';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
 import { TranslationService } from './core/services/translation.service';
 
+// Cache-busted so a deployed translation update is never masked by a
+// browser's HTTP cache - these JSON files carry no content hash the way
+// Angular's own JS/CSS bundles do, and without this, a client whose cache
+// already holds an old copy can keep seeing it for that copy's entire
+// heuristic freshness window (nginx's Cache-Control header alone only
+// protects requests made *after* the header started being sent, not
+// entries a client cached before that).
+const BUILD_STAMP = Date.now();
+
 function httpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+  return new TranslateHttpLoader(http, './assets/i18n/', `.json?v=${BUILD_STAMP}`);
 }
 
 function initTranslations(translationService: TranslationService) {
